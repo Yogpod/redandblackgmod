@@ -1,0 +1,444 @@
+
+.servers
+{
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	right: 0px;
+	bottom: 0px;
+	overflow: auto;
+}
+
+.gamemode
+{
+	margin-right: 5px;
+	margin-bottom: 5px;
+	background-color: #111;
+	padding: 5px 20px;
+	border-radius: 3px;
+	cursor: pointer;
+	position: relative;
+	height: 34px;
+	overflow: hidden;
+	background-image: -webkit-linear-gradient(bottom, rgb(25,25,25) 1%, rgb(25,25,25) 99%);
+}
+
+.gamemode:hover
+{
+	background-image: -webkit-linear-gradient(bottom, rgb(50,50,50) 1%, rgb(50,50,50) 99%);
+}
+
+.gamemode .name
+{
+	font-weight: bold;
+	position: absolute;
+	left: 40px;
+	top: 5px;
+	font-size: 20px;
+	white-space: nowrap;
+	color: #DDD;
+}
+
+.gamemode .stats
+{
+	text-align: right;
+	font-size: 12px;
+	color: #888;
+	position: absolute;
+	bottom: 2px;
+	left: 40px;
+}
+
+.gamemode IMG
+{
+	font-weight: bold;
+	width: 24px;
+	height: 24px;
+	position: absolute;
+	left: 7px;
+	top: 11px;
+}
+
+H1 small
+{
+	color: #888;
+	font-size: 14px;
+	font-weight: normal;
+	padding-left: 8px;
+}
+
+.serverlist
+{
+	position: absolute;
+	top: 90px;
+	bottom: 0px;
+	left: 0px;
+	right: 320px;
+	background-color: #111;
+	padding: 10px;
+	border-radius: 4px;
+}
+
+
+
+
+.serverlist ping, .serverlist maxplayers, .serverlist players, .serverlist map, .serverlist rank
+{
+	width: 50px;
+	font-size: 12px;
+	overflow: hidden;
+	height: 16px;
+	position: absolute;
+	text-align: center;
+}
+
+.serverlist name
+{
+	position: absolute;
+	overflow: hidden;
+	white-space: nowrap;
+	left: 4px;
+	right: 240px;
+	font-size: 14px;
+}
+
+.serverlist map
+{
+	right: 148px;
+	width: 100px;
+	text-align: left;
+}
+
+.serverlist players
+{
+	right: 100px;
+	width: 50px;
+}
+
+.serverlist ping
+{
+	right: 68px;
+	width: 32px;
+}
+
+.serverlist rank
+{
+	right: 4px;
+	width: 64px;
+}
+
+.serverlist .server rank
+{
+	background-image: url( '../../img/rank1.png?1' );
+}
+
+.serverlist .server rank.rank5
+{
+	background-image: url( '../../img/rank5.png?1' );
+}
+
+.serverlist .server rank.rank4
+{
+	background-image: url( '../../img/rank4.png?1' );
+}
+
+.serverlist .server rank.rank3
+{
+	background-image: url( '../../img/rank3.png?1' );
+}
+
+.serverlist .server rank.rank2
+{
+	background-image: url( '../../img/rank2.png?1' );
+}
+
+
+
+.serverlist .server
+{
+	height: 16px;
+	background-color: #222;
+	padding: 3px;
+	color: #DDD;
+	cursor: pointer;
+}
+
+.serverlist .server:nth-child(odd)
+{
+	background-color: #333;
+}
+
+.serverlist .empty
+{
+	color: #999;
+}
+
+.serverlist .missingmap map
+{
+	color: #8b0000;
+}
+
+.serverlist .empty players
+{
+	color: #99F;
+}
+
+.serverlist .server:hover
+{
+	background-color: #444;
+}
+
+.serverlist .header 
+{
+	background-color: #555;
+	height: 30px;
+	position: absolute;
+	border-radius: 4px 4px 0 0;
+	padding-top: 4px;
+	font-size: 11px;
+}
+
+.serverlist .header ping, .serverlist .header maxplayers, .serverlist .header players, .serverlist .header map, .serverlist .header name, .serverlist .header rank
+{
+	font-size: 11px;
+	font-weight: normal;
+	color: #DDD;
+	text-align: center;
+	cursor: pointer;
+}
+
+@media screen and (min-width: 1280px)
+{
+	.serverlist .servers ping, .serverlist .servers maxplayers, .serverlist .servers players, .serverlist .servers map, .serverlist .servers rank
+	{
+		font-size: 13px;
+		margin-top: 4px;
+	}
+	
+	.serverlist name
+	{
+		font-size: 13px;
+		font-weight: bold;
+		right: 280px;
+	}
+
+	.serverlist map
+	{
+		width: 130px;
+	}
+	
+	.serverlist .header name
+	{
+		padding: 0;
+	}
+}
+
+
+H1.menuheader
+{
+	color: white;
+	margin-bottom: 0;
+	text-shadow: 2px 2px 1px black;
+
+}
+
+H1.menuheader small
+{
+	color: white;
+	font-weight: bold;
+	text-shadow: 1px 1px 1px black;
+}
+
+A.bglink
+{
+	color: #DDD;
+	font-weight: bold;
+	background-color: #580000;
+	padding: 8px 10px;
+	border-radius: 2px;
+	display: inline-block;
+	font-size: 14px;
+}
+
+A.bglink:hover
+{
+	background-color: #555;
+}
+
+.serverinfo
+{
+	position: absolute;
+	top: 90px;
+	bottom: 0px;
+	width: 280px;
+	right: 0px;
+	background-color: #111;
+	padding: 10px 15px;
+	border-radius: 4px;
+}
+
+.serverinfo name
+{
+	font-size: 16px;
+	font-weight: bold;
+	display: block;
+	white-space: nowrap;
+	overflow: hidden;
+	width: 100%;
+	letter-spacing: -1px;
+	color: #DDD;
+}
+
+.serverinfo button
+{
+	width: 100%;
+	font-size: 30px;
+}
+
+.serverinfo address
+{
+	text-align: left;
+	font-size: 12px;
+	color: #DDD;
+}
+
+.serverinfo subinfo
+{
+	display: block;
+	color: #DDD;
+}
+
+.serverinfo > div
+{
+	display: table;
+	width: 100%;
+	height: 100%;
+	table-layout: fixed;
+}
+
+.serverinfo div.cell
+{
+	display: table-cell;
+}
+
+.serverinfo header
+{
+	display: table-row;
+	height: 0;
+}
+
+.serverinfo players
+{
+	display: block;
+	height: 100%;
+	background-color: #222;
+	border-radius: 4px;
+	overflow: auto;
+}
+
+.serverinfo players .ng-scope
+{
+	color: #AAA;
+}
+
+.serverinfo players table tr:nth-child(1)
+{
+	color: #DDD !important;
+}
+
+.serverinfo footer
+{
+	display: table-row;
+	height: 0;
+	margin-top: 5px;
+}
+
+.serverinfo footer input[type=password]
+{
+	width: 100%;
+	padding: 4px;
+	margin-bottom: 5px;
+	background-color: #444;
+	border-width: 2px;
+	border-style: solid;
+	border-color: #222 #666 #666 #222;
+}
+
+.serverinfo footer input[type=password]:focus
+{
+	border-color: #666 #AAA #AAA #666;
+}
+
+.activeserver
+{
+	background-color: #666 !important;
+}
+
+DIV.installgamemode
+{
+	margin-right: 320px;
+	height: 25px;
+	line-height: 26px;
+	font-size: 24px;
+	font-weight: bold;
+	background-color: #111;
+	text-align: center;
+	color: #DDD;
+	padding: 5px;
+	border-radius: 5px;
+	position: absolute;
+	top: 10px;
+	right: 0;
+	border: 2px solid #111;
+	z-index: 100;
+	cursor: pointer;
+	background: #111 url( '../../img/gm_install32.png' ) no-repeat 6px center;
+	padding-left: 36px;
+}
+
+DIV.installgamemode:hover
+{
+	background-color: #555;
+}
+
+SPAN.installgamemode
+{
+	position: absolute;
+	right: 0px;
+	top: 0px;
+	bottom: 0px;
+	border-radius: 0 4px 4px 0;
+	cursor: pointer;
+	background: #444 url( '../../img/gm_install16.png' ) no-repeat 13px center;
+	width: 42px;
+}
+
+SPAN.installgamemode:hover
+{
+	background-color: #666;
+}
+
+.server_gamemodes
+{
+	top: 64px; 
+	border: 5px solid #111;
+}
+
+.whiterounded
+{
+	background-color: #111;
+}
+
+@media screen and (min-width: 1280px)
+{
+	.server_gamemodes {
+		margin: 0 auto;
+		width: 80%;
+		max-width: 1000px;
+	}
+}
+
+.noplayers
+{
+	opacity: 0.4;
+}

@@ -1,0 +1,11 @@
+"UnlitGeneric"
+{
+	"$basetexture" "vgui/white_additive"
+	"$vertexcolor" 1
+	"$color" "[0 0 0 0]"
+	"$vertexalpha" 1
+	"$additive" 1
+	"$ignorez" 1
+	"$no_fullbright" "1"
+	"$nolod" "1"
+}
