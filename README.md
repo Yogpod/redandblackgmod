@@ -1,4 +1,4 @@
-# redandblackgmod
+# redandblackgmod w/Clientside Lua Viewer
 Drop all these folders into /garrysmod for red and black gmod menu & console & server browser
 ### Main Menu
 ![alt text](https://i.imgur.com/bj6phP4.jpg)
@@ -12,3 +12,5 @@ Drop all these folders into /garrysmod for red and black gmod menu & console & s
 ![alt text](https://i.imgur.com/SYXHzin.jpg)
 ### Console
 ![alt text](https://i.imgur.com/NmVXVpw.jpg)
+
+no images of lua viewer because i removed it from mine
