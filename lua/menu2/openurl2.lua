@@ -19,12 +19,12 @@ function PANEL:Init()
     self.Buttons:Dock( BOTTOM )
 
     self.Nope = vgui.Create( "DButton", self.Buttons )
-    self.Nope:SetText( "Non" )
+    self.Nope:SetText( "No" )
     self.Nope.DoClick = function() self:DoNope() end
     self.Nope:Dock( RIGHT )
 
     self.Yes = vgui.Create( "DButton", self.Buttons )
-    self.Yes:SetText( "Oui" )
+    self.Yes:SetText( "Yes" )
     self.Yes.DoClick = function() self:DoYes() end
     self.Yes:DockMargin( 0, 0, 8, 0 )
     self.Yes:Dock( RIGHT )

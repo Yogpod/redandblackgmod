@@ -3,9 +3,9 @@ local Aquamarine = Color(127, 255, 212, 255)
 local LightBlue  = Color(72,  209, 204, 255)
 local Message = {
 	"+-------------------oOo-------------------+",
-	"|~ ~ ~ ~ ~ Gizeh LUA Filestealer ~ ~ ~ ~ ~|",
-	"|~ ~ ~       100% Undetectable         ~ ~|",
-	"|~ ~      Commande : lua_view_cl       ~ ~|",
+	"|~ ~ ~ ~ ~ 					  ~ ~ ~ ~ ~|",
+	"|~ ~your weird red gui was loaded retard ~|",
+	"|~ ~                                   ~ ~|",
 	"+-------------------oOo-------------------+",
 }
 local Modules = {
