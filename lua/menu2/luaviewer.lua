@@ -123,7 +123,7 @@ end
 local VIEWER = {}
 function VIEWER:Init()
 	if not IsInGame() then 
-		MsgC(Color(255, 0, 0), "You must join a server before doing that !\n")
+		MsgC(Color(255, 0, 0), "You must join a server before opening the lua viewer!\n")
 		self:Close()
 		return
 	end
