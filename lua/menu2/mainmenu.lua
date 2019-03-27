@@ -1,22 +1,22 @@
 include( 'openurl2.lua' )
 require("console")
-local Gizeh = Gizeh or {}
+local RNB = RNB or {}
 local R=function(a,b,c,d,e) return function() return RunConsoleCommand(a,b,c,d,e) end end
 local M=function(x) return function() return RunGameUICommand(x) end end
 local NOT=function(f) return function(...) return not f(...) end end
-local RM_GIZEH_CONSOLE=function() console.Initialize() console.Activate() end
-local RM_GIZEH=function() 
+local RM_RNB_CONSOLE=function() console.Initialize() console.Activate() end
+local RM_RNB=function() 
 	if file.Exists("bonus_menu_onoff.txt","DATA") then
 		MsgC(Color(0, 255, 0), "This feature is disabled because it is not needed in the menu v2;)\n") 
 		file.Delete("bonus_menu_onoff.txt")
 	end
 end
 
-if Gizeh.bidouillage and Gizeh.bidouillage:IsValid() then Gizeh.bidouillage:Remove() end
-Gizeh.bidouillage = vgui.Create('DPanelList',nil,'Gizeh.bidouillage')
-Gizeh.bidouillage:EnableVerticalScrollbar(true)
-Gizeh.bidouillage:Dock(TOP)
-Gizeh.bidouillage:DockMargin(0,0,0,0)
+if RNB.bidouillage and RNB.bidouillage:IsValid() then RNB.bidouillage:Remove() end
+RNB.bidouillage = vgui.Create('DPanelList',nil,'RNB.bidouillage')
+RNB.bidouillage:EnableVerticalScrollbar(true)
+RNB.bidouillage:Dock(TOP)
+RNB.bidouillage:DockMargin(0,0,0,0)
 
 local gameslist
 function CreateGames()
@@ -70,22 +70,22 @@ function CreateGames()
 	
 end
 
-function Gizeh.Open_Menu()
-if IsValid(Gizeh.bonus_menu) then Gizeh.bonus_menu:Remove() end
-Gizeh.bonus_menu = vgui.Create( "DFrame" )
-Gizeh.bonus_menu:SetPos( 0, 0 )
-Gizeh.bonus_menu:SetSize( ScrW(), 25 )
-Gizeh.bonus_menu:SetTitle( "" )
-Gizeh.bonus_menu:SetDraggable( false )
-Gizeh.bonus_menu:ShowCloseButton( false )
-Gizeh.bonus_menu.Paint = function()
+function RNB.Open_Menu()
+if IsValid(RNB.bonus_menu) then RNB.bonus_menu:Remove() end
+RNB.bonus_menu = vgui.Create( "DFrame" )
+RNB.bonus_menu:SetPos( 0, 0 )
+RNB.bonus_menu:SetSize( ScrW(), 25 )
+RNB.bonus_menu:SetTitle( "" )
+RNB.bonus_menu:SetDraggable( false )
+RNB.bonus_menu:ShowCloseButton( false )
+RNB.bonus_menu.Paint = function()
 	surface.SetDrawColor( 255, 0, 0, 255 )
-	surface.DrawRect( 0, 0, Gizeh.bonus_menu:GetWide(), Gizeh.bonus_menu:GetTall() ) 
+	surface.DrawRect( 0, 0, RNB.bonus_menu:GetWide(), RNB.bonus_menu:GetTall() ) 
     surface.SetDrawColor( 0, 0, 0, 230 )
-    surface.DrawRect( 0, 0, Gizeh.bonus_menu:GetWide(), Gizeh.bonus_menu:GetTall() ) 
+    surface.DrawRect( 0, 0, RNB.bonus_menu:GetWide(), RNB.bonus_menu:GetTall() ) 
 end
 
-local bonus_heure = vgui.Create( "DLabel", Gizeh.bonus_menu )
+local bonus_heure = vgui.Create( "DLabel", RNB.bonus_menu )
 bonus_heure:SetPos( ScrW()-50, 3 )
 bonus_heure:SetFont("TargetID")
 bonus_heure:SetColor( Color( 180, 180, 180 ) )
@@ -94,7 +94,7 @@ timer.Create( "refresh_heure_menu2", 5, 0, function()
 bonus_heure:SetText( os.date( "%H:%M") )
 end)
 
-local bonus_boutton = vgui.Create("DButton", Gizeh.bonus_menu)
+local bonus_boutton = vgui.Create("DButton", RNB.bonus_menu)
 bonus_boutton:SetText( "" )
 bonus_boutton:SetPos( 5, 0 )
 bonus_boutton.Paint = function( self, w, h )
@@ -112,7 +112,7 @@ local tall = bonus_boutton:GetTall()+4
 tall=tall<16 and 16 or tall
 bonus_boutton:SetTall(tall)
 
-local bonus_boutton = vgui.Create("DButton", Gizeh.bonus_menu)
+local bonus_boutton = vgui.Create("DButton", RNB.bonus_menu)
 bonus_boutton:SetText( "" )
 bonus_boutton:SetPos( 35, -0.65 )
 bonus_boutton.Paint = function( self, w, h )
@@ -130,7 +130,7 @@ local tall = bonus_boutton:GetTall()+4
 tall=tall<16 and 16 or tall
 bonus_boutton:SetTall(tall)
 
-local bonus_boutton = vgui.Create("DButton", Gizeh.bonus_menu)
+local bonus_boutton = vgui.Create("DButton", RNB.bonus_menu)
 bonus_boutton:SetText( "" )
 bonus_boutton:SetPos( 65, -0.65 )
 bonus_boutton.Paint = function( self, w, h )
@@ -148,7 +148,7 @@ local tall = bonus_boutton:GetTall()+4
 tall=tall<16 and 16 or tall
 bonus_boutton:SetTall(tall)
 
-local bonus_boutton = vgui.Create("DButton", Gizeh.bonus_menu)
+local bonus_boutton = vgui.Create("DButton", RNB.bonus_menu)
 bonus_boutton:SetText( "" )
 bonus_boutton:SetPos( 95, -0.6 )
 bonus_boutton.Paint = function( self, w, h )
@@ -166,7 +166,7 @@ local tall = bonus_boutton:GetTall()+4
 tall=tall<16 and 16 or tall
 bonus_boutton:SetTall(tall)
 
-local bonus_boutton = vgui.Create("DButton", Gizeh.bonus_menu)
+local bonus_boutton = vgui.Create("DButton", RNB.bonus_menu)
 bonus_boutton:SetText( "" )
 bonus_boutton:SetPos( 125, -0.6 )
 bonus_boutton.Paint = function( self, w, h )
@@ -184,7 +184,7 @@ local tall = bonus_boutton:GetTall()+4
 tall=tall<16 and 16 or tall
 bonus_boutton:SetTall(tall)
 
-local bonus_boutton = vgui.Create("DButton", Gizeh.bonus_menu)
+local bonus_boutton = vgui.Create("DButton", RNB.bonus_menu)
 bonus_boutton:SetText( "" )
 bonus_boutton:SetPos( 155, -0.6 )
 bonus_boutton.Paint = function( self, w, h )
@@ -202,7 +202,7 @@ local tall = bonus_boutton:GetTall()+4
 tall=tall<16 and 16 or tall
 bonus_boutton:SetTall(tall)
 
-local bonus_boutton = vgui.Create("DButton", Gizeh.bonus_menu)
+local bonus_boutton = vgui.Create("DButton", RNB.bonus_menu)
 bonus_boutton:SetText( "" )
 bonus_boutton:SetPos( 185, -0.65 )
 bonus_boutton.Paint = function( self, w, h )
@@ -220,7 +220,7 @@ local tall = bonus_boutton:GetTall()+4
 tall=tall<16 and 16 or tall
 bonus_boutton:SetTall(tall)
 
-local bonus_boutton = vgui.Create("DButton", Gizeh.bonus_menu)
+local bonus_boutton = vgui.Create("DButton", RNB.bonus_menu)
 bonus_boutton:SetText( "" )
 bonus_boutton:SetPos( 215, -0.65 )
 bonus_boutton.Paint = function( self, w, h )
@@ -238,14 +238,14 @@ local tall = bonus_boutton:GetTall()+4
 tall=tall<16 and 16 or tall
 bonus_boutton:SetTall(tall)
 
-local bonus_boutton = vgui.Create("DButton", Gizeh.bonus_menu)
+local bonus_boutton = vgui.Create("DButton", RNB.bonus_menu)
 bonus_boutton:SetText( "" )
 bonus_boutton:SetPos( ScrW()-175, -0.6 )
 bonus_boutton.Paint = function( self, w, h )
   draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 0) )
 end
 bonus_boutton.DoClick = function()
-  RM_GIZEH_CONSOLE()
+  RM_RNB_CONSOLE()
   bonus_boutton:SetSelected(false)
 end
 bonus_boutton:SetImage("icon16/application_osx_terminal.png")
@@ -256,7 +256,7 @@ local tall = bonus_boutton:GetTall()+4
 tall=tall<16 and 16 or tall
 bonus_boutton:SetTall(tall)
 
-local bonus_boutton = vgui.Create("DButton", Gizeh.bonus_menu)
+local bonus_boutton = vgui.Create("DButton", RNB.bonus_menu)
 bonus_boutton:SetText( "" )
 bonus_boutton:SetPos( ScrW()-145, -0.6 )
 bonus_boutton.Paint = function( self, w, h )
@@ -274,7 +274,7 @@ local tall = bonus_boutton:GetTall()+4
 tall=tall<16 and 16 or tall
 bonus_boutton:SetTall(tall)
 
-local bonus_boutton = vgui.Create("DButton", Gizeh.bonus_menu)
+local bonus_boutton = vgui.Create("DButton", RNB.bonus_menu)
 bonus_boutton:SetText( "" )
 bonus_boutton:SetPos( ScrW()-115, -0.6 )
 bonus_boutton.Paint = function( self, w, h )
@@ -292,14 +292,14 @@ local tall = bonus_boutton:GetTall()+4
 tall=tall<16 and 16 or tall
 bonus_boutton:SetTall(tall)
 
-local bonus_boutton = vgui.Create("DButton", Gizeh.bonus_menu)
+local bonus_boutton = vgui.Create("DButton", RNB.bonus_menu)
 bonus_boutton:SetText( "" )
 bonus_boutton:SetPos( ScrW()-85, -0.5 )
 bonus_boutton.Paint = function( self, w, h )
   draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 0) )
 end
 bonus_boutton.DoClick = function()
-  RM_GIZEH()
+  RM_RNB()
   bonus_boutton:SetSelected(false)
 end
 bonus_boutton:SetImage("icon16/bug.png")
@@ -312,9 +312,9 @@ bonus_boutton:SetTall(tall)
 end
 
 hook.Add( "InGame", "CreateMenu", function(is)
-	Gizeh.Open_Menu()
+	RNB.Open_Menu()
 end)
 
 hook.Add( "ConsoleVisible", "CreateMenu", function(is)
-	Gizeh.Open_Menu()
+	RNB.Open_Menu()
 end)
