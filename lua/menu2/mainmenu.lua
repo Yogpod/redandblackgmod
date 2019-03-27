@@ -7,7 +7,7 @@ local NOT=function(f) return function(...) return not f(...) end end
 local RM_RNB_CONSOLE=function() console.Initialize() console.Activate() end
 local RM_RNB=function() 
 	if file.Exists("bonus_menu_onoff.txt","DATA") then
-		MsgC(Color(0, 255, 0), "This feature is disabled because it is not needed in the menu v2;)\n") 
+		MsgC(Color(0, 255, 0), "This feature is disabled\n") 
 		file.Delete("bonus_menu_onoff.txt")
 	end
 end
