@@ -1,7 +1,7 @@
 
-include( 'background.lua' )
-include( 'cef_credits.lua' )
-include( 'openurl.lua' )
+include( "background.lua" )
+include( "cef_credits.lua" )
+include( "openurl.lua" )
 
 pnlMainMenu = nil
 
@@ -74,7 +74,21 @@ function PANEL:Paint()
 			self.HTML:QueueJavascript( "SetInGame( false )" )
 
 		end
+	end
 
+	if ( self.CanAddServerToFavorites != CanAddServerToFavorites() ) then
+
+		self.CanAddServerToFavorites = CanAddServerToFavorites()
+
+		if ( self.CanAddServerToFavorites ) then
+
+			self.HTML:QueueJavascript( "SetShowFavButton( true )" )
+
+		else
+
+			self.HTML:QueueJavascript( "SetShowFavButton( false )" )
+
+		end
 	end
 
 end
@@ -92,7 +106,7 @@ function PANEL:RefreshGamemodes()
 
 	self.HTML:QueueJavascript( "UpdateGamemodes( " .. json .. " )" )
 	self:UpdateBackgroundImages()
-	self.HTML:QueueJavascript( "UpdateCurrentGamemode( '" .. engine.ActiveGamemode() .. "' )" )
+	self.HTML:QueueJavascript( "UpdateCurrentGamemode( '" .. engine.ActiveGamemode():JavascriptSafe() .. "' )" )
 
 end
 
@@ -109,14 +123,14 @@ function PANEL:UpdateBackgroundImages()
 	--
 	-- If there's screenshots in gamemodes/<gamemode>/backgrounds/*.jpg use them
 	--
-	--if ( !self:ScreenshotScan( "gamemodes/" .. engine.ActiveGamemode() .. "/backgrounds/" ) ) then
+	if ( !self:ScreenshotScan( "gamemodes/" .. engine.ActiveGamemode() .. "/backgrounds/" ) ) then
 
 		--
 		-- If there's no gamemode specific here we'll use the default backgrounds
 		--
-		self:ScreenshotScan( "gamemodes/base/backgrounds/*.jpg" )
+		self:ScreenshotScan( "backgrounds/" )
 
-	--end
+	end
 
 	ChangeBackground( engine.ActiveGamemode() )
 
@@ -129,25 +143,6 @@ function PANEL:Call( js )
 end
 
 vgui.Register( "MainMenuPanel", PANEL, "EditablePanel" )
-
-function UpdateSteamName( id, time )
-
-	if ( !id ) then return end
-
-	if ( !time ) then time = 0.2 end
-
-	local name = steamworks.GetPlayerName( id )
-	if ( name != "" && name != "[unknown]" ) then
-
-		pnlMainMenu:Call( "SteamName( \"" .. id .. "\", \"" .. name .. "\" )" )
-		return
-
-	end
-
-	steamworks.RequestPlayerInfo( id )
-	timer.Simple( time, function() UpdateSteamName( id, time + 0.2 ) end )
-
-end
 
 --
 -- Called from JS when starting a new game
@@ -207,7 +202,7 @@ function GetPlayerList( serverip )
 	serverlist.PlayerList( serverip, function( tbl )
 
 		local json = util.TableToJSON( tbl )
-		pnlMainMenu:Call( "SetPlayerList( '" .. serverip .. "', " .. json .. ")" )
+		pnlMainMenu:Call( "SetPlayerList( '" .. serverip:JavascriptSafe() .. "', " .. json .. ")" )
 
 	end )
 
@@ -219,57 +214,45 @@ local BlackList = {
 	Descripts = {},
 	Gamemodes = {},
 	Maps = {},
-	Translations = {},
-	TranslatedHostnames = {}
 }
 
-steamworks.FileInfo( 580620784, function( result )
+local NewsList = {}
 
+GetAPIManifest( function( result )
+	result = util.JSONToTable( result )
 	if ( !result ) then return end
 
-	steamworks.Download( result.fileid, false, function( name )
+	NewsList = result.News.Blogs or {}
+	LoadNewsList()
 
-		local fs = file.Open( name, "r", "MOD" )
-		local data = fs:Read( fs:Size() )
-		fs:Close()
-
-		BlackList = util.JSONToTable( data ) or {}
-
-		BlackList.Addresses = BlackList.Addresses or {}
-		BlackList.Hostnames = BlackList.Hostnames or {}
-		BlackList.Descripts = BlackList.Descripts or {}
-		BlackList.Gamemodes = BlackList.Gamemodes or {}
-		BlackList.Maps = BlackList.Maps or {}
-		BlackList.Translations = BlackList.Translations or {}
-		BlackList.TranslatedHostnames = BlackList.TranslatedHostnames or {}
-
-	end )
-
-end )
-steamworks.Unsubscribe( 580620784 )
-
-local function IsServerBlacklisted( address, hostname, description, gamemode, map )
-	address = address:match( "[^:]*" )
-
-	for k, v in ipairs( BlackList.Addresses ) do
-		if address == v then
-			return true
+	for k, v in pairs( result.Servers.Banned or {} ) do
+		if ( v:StartWith( "map:" ) ) then
+			table.insert( BlackList.Maps, v:sub( 5 ) )
+		elseif ( v:StartWith( "desc:" ) ) then
+			table.insert( BlackList.Descripts, v:sub( 6 ) )
+		elseif ( v:StartWith( "host:" ) ) then
+			table.insert( BlackList.Hostnames, v:sub( 6 ) )
+		elseif ( v:StartWith( "gm:" ) ) then
+			table.insert( BlackList.Gamemodes, v:sub( 4 ) )
+		else
+			table.insert( BlackList.Addresses, v )
 		end
 	end
+end )
 
-	if ( #BlackList.TranslatedHostnames > 0 && table.Count( BlackList.Translations ) > 1 ) then
-		local hostname_tr = hostname
-		for bad, good in pairs( BlackList.Translations ) do
-			while ( hostname_tr:find( bad ) ) do
-				local s, e = hostname_tr:find( bad )
-				hostname_tr = hostname_tr:sub( 0, s - 1 ) .. good .. hostname_tr:sub( e + 1 )
-			end
-		end
+function LoadNewsList()
+	if ( !pnlMainMenu ) then return end
 
-		for k, v in ipairs( BlackList.TranslatedHostnames ) do
-			if string.match( hostname_tr, v ) then
-				return true
-			end
+	local json = util.TableToJSON( NewsList )
+	pnlMainMenu:Call( "UpdateNewsList(" .. json .. ")" )
+end
+
+local function IsServerBlacklisted( address, hostname, description, gm, map )
+	local addressNoPort = address:match( "[^:]*" )
+
+	for k, v in ipairs( BlackList.Addresses ) do
+		if ( address == v || addressNoPort == v ) then
+			return true
 		end
 	end
 
@@ -286,7 +269,7 @@ local function IsServerBlacklisted( address, hostname, description, gamemode, ma
 	end
 
 	for k, v in ipairs( BlackList.Gamemodes ) do
-		if string.match( gamemode, v ) then
+		if string.match( gm, v ) then
 			return true
 		end
 	end
@@ -303,47 +286,48 @@ end
 local Servers = {}
 local ShouldStop = {}
 
-function GetServers( type, id )
+function GetServers( category, id )
 
-	ShouldStop[ type ] = false
-	Servers[ type ] = {}
+	category = string.JavascriptSafe( category )
+	id = string.JavascriptSafe( id )
+
+	ShouldStop[ category ] = false
+	Servers[ category ] = {}
 
 	local data = {
-		Callback = function( ping , name, desc, map, players, maxplayers, botplayers, pass, lastplayed, address, gamemode, workshopid )
+		Callback = function( ping, name, desc, map, players, maxplayers, botplayers, pass, lastplayed, address, gm, workshopid )
 
-			if Servers[ type ] && Servers[ type ][ address ] then print("NNONONONONO", address, type ) return end
-			Servers[ type ][ address ] = true
+			if Servers[ category ] && Servers[ category ][ address ] then print( "Server Browser Error!", address, category ) return end
+			Servers[ category ][ address ] = true
 
-			if ( !IsServerBlacklisted( address, name, desc, gamemode, map ) ) then
+			if ( !IsServerBlacklisted( address, name, desc, gm, map ) ) then
 
 				name = string.JavascriptSafe( name )
 				desc = string.JavascriptSafe( desc )
 				map = string.JavascriptSafe( map )
 				address = string.JavascriptSafe( address )
-				gamemode = string.JavascriptSafe( gamemode )
+				gm = string.JavascriptSafe( gm )
 				workshopid = string.JavascriptSafe( workshopid )
 
-				if ( pass ) then pass = "true" else pass = "false" end
-
-				pnlMainMenu:Call( "AddServer( '"..type.."', '"..id.."', "..ping..", \""..name.."\", \""..desc.."\", \""..map.."\", "..players..", "..maxplayers..", "..botplayers..", "..pass..", "..lastplayed..", \""..address.."\", \""..gamemode.."\", \""..workshopid.."\" )" )
-
+				pnlMainMenu:Call( string.format( 'AddServer( "%s", "%s", %i, "%s", "%s", "%s", %i, %i, %i, %s, %i, "%s", "%s", "%s" );',
+					category, id, ping, name, desc, map, players, maxplayers, botplayers, tostring( pass ), lastplayed, address, gm, workshopid ) )
 			else
 
 				Msg( "Ignoring blacklisted server: ", name, " @ ", address, "\n" )
 
 			end
 
-			return !ShouldStop[ type ]
+			return !ShouldStop[ category ]
 
 		end,
 
 		Finished = function()
-			pnlMainMenu:Call( "FinishedServeres( '" .. type .. "' )" )
-			Servers[ type ] = {}
+			pnlMainMenu:Call( "FinishedServeres( '" .. category:JavascriptSafe() .. "' )" )
+			Servers[ category ] = {}
 		end,
 
-		Type = type,
-		GameDir = 'garrysmod',
+		Type = category,
+		GameDir = "garrysmod",
 		AppID = 4000,
 	}
 
@@ -351,10 +335,10 @@ function GetServers( type, id )
 
 end
 
-function DoStopServers( type )
-	pnlMainMenu:Call( "FinishedServeres( '" .. type .. "' )" )
-	ShouldStop[ type ] = true
-	Servers[ type ] = {}
+function DoStopServers( category )
+	pnlMainMenu:Call( "FinishedServeres( '" .. category:JavascriptSafe() .. "' )" )
+	ShouldStop[ category ] = true
+	Servers[ category ] = {}
 end
 
 --
@@ -420,7 +404,7 @@ end )
 timer.Simple( 0, function()
 
 	pnlMainMenu = vgui.Create( "MainMenuPanel" )
-	pnlMainMenu:Call( "UpdateVersion( '" .. VERSIONSTR .. "', '" .. BRANCH .. "' )" )
+	pnlMainMenu:Call( "UpdateVersion( '" .. VERSIONSTR:JavascriptSafe() .. "', '" .. BRANCH:JavascriptSafe() .. "' )" )
 
 	local language = GetConVarString( "gmod_language" )
 	LanguageChanged( language )
