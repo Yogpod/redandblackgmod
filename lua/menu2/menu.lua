@@ -13,7 +13,6 @@ local Modules = {
 	"menu2/fuckloadingscreen.lua",
 	"menu2/mainmenu.lua",
 	"menu2/errors.lua",
-	"menu2/luaviewer.lua",
 	"menu2/openurl2.lua",
 	"menu2/serverquery.lua",
 }
