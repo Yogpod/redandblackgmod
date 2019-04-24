@@ -191,24 +191,6 @@ bonus_boutton.Paint = function( self, w, h )
   draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 0) )
 end
 bonus_boutton.DoClick = function()
-  R"lua_openserverbrowser"()
-  bonus_boutton:SetSelected(false)
-end
-bonus_boutton:SetImage("icon16/world_add.png")
-bonus_boutton:InvalidateLayout(true)
-bonus_boutton:SetTextInset( 16+ 16, 0 )
-bonus_boutton:SetContentAlignment(4) 
-local tall = bonus_boutton:GetTall()+4
-tall=tall<16 and 16 or tall
-bonus_boutton:SetTall(tall)
-
-local bonus_boutton = vgui.Create("DButton", RNB.bonus_menu)
-bonus_boutton:SetText( "" )
-bonus_boutton:SetPos( 185, -0.65 )
-bonus_boutton.Paint = function( self, w, h )
-  draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 0) )
-end
-bonus_boutton.DoClick = function()
   M"openoptionsdialog"()
   bonus_boutton:SetSelected(false)
 end
@@ -222,7 +204,7 @@ bonus_boutton:SetTall(tall)
 
 local bonus_boutton = vgui.Create("DButton", RNB.bonus_menu)
 bonus_boutton:SetText( "" )
-bonus_boutton:SetPos( 215, -0.65 )
+bonus_boutton:SetPos( 185, -0.65 )
 bonus_boutton.Paint = function( self, w, h )
   draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 0) )
 end
