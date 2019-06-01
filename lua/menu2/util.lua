@@ -75,8 +75,8 @@ hook.Add( "MenuStart", "Menu2", function()
 end )
 hook.Add( "ConsoleVisible", "Menu2", function(is)
 	print(is 
-		and	'<Console Activated>'
-		or	'<Console Deactivated>'
+		and	'\n<Console Activated>'
+		or	'\n<Console Deactivated>'
 	)
 end )
 hook.Add( "InGame", "Menu2", function(is)
