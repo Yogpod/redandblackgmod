@@ -240,12 +240,6 @@ GetAPIManifest( function( result )
 	end
 end )
 
-function LoadNewsList()
-	if ( !pnlMainMenu ) then return end
-
-	local json = util.TableToJSON( NewsList )
-	pnlMainMenu:Call( "UpdateNewsList(" .. json .. ")" )
-end
 
 local function IsServerBlacklisted( address, hostname, description, gm, map )
 	local addressNoPort = address:match( "[^:]*" )
