@@ -195,3 +195,15 @@ function CompileFile(path)
 		return func
 	end
 end
+--shitty version checker, remove if you don't want notifications for updates
+local version = "2"
+http.Fetch( "https://pastebin.com/raw/KXGqugUc",
+    function( body )
+        versionr = body
+if versionr == version then
+    MsgC("Your menu version is up to date!\n")
+end
+if versionr > version then
+    MsgC("Version Outdated, please go to <url> to update\n")
+end
+end)
