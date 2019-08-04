@@ -196,7 +196,7 @@ function CompileFile(path)
 	end
 end
 
---shitty version checker, remove if you don't want notifications for updates
+--shitty version checker, remove if you don't want notifications for updates 
 local version = "2"
 http.Fetch( "https://pastebin.com/raw/KXGqugUc",
     function( body )
