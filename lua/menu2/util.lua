@@ -195,15 +195,19 @@ function CompileFile(path)
 		return func
 	end
 end
+
 --shitty version checker, remove if you don't want notifications for updates
-local version = "2"
+local version = "1"
 http.Fetch( "https://pastebin.com/raw/KXGqugUc",
     function( body )
         versionr = body
 if versionr == version then
+
     MsgC("Your menu version is up to date!\n")
 end
 if versionr > version then
-    MsgC("Version Outdated, please go to <url> to update\n")
+	for i = 1, 100 do
+    MsgC("Version Outdated, please go to https://github.com/Yogpod/redandblackgmod to update\n")
+end
 end
 end)
