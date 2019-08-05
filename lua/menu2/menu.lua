@@ -3,7 +3,7 @@ local Aquamarine = Color(127, 255, 212, 255)
 local LightBlue  = Color(72,  209, 204, 255)
 local Message = {
 	"+-------------------oOo-------------------+",
-	"|~ ~ ~ ~ ~ 					  ~ ~ ~ ~ ~|",
+	"|~ ~ ~ ~ ~ 					~ ~ ~ ~ ~|",
 	"|~ ~   RNB Gmod Modification Loaded      ~|",
 	"|~ ~                                   ~ ~|",
 	"+-------------------oOo-------------------+",
@@ -34,6 +34,22 @@ for _, v in pairs(Modules) do
 	MsgC(Aquamarine, " ...\n")
 	include(v)
 end
-MsgC(LightBlue, "\nAll modules were loaded!\n\n")
+
+
+local version = "2"
+http.Fetch( "https://pastebin.com/raw/KXGqugUc",
+    function( body )
+        versionr = body
+if versionr == version then
+
+    MsgC(Lime,"Your menu version is up to date!\n")
+end
+if versionr > version then
+	for i = 1, 100 do
+    MsgC(Lime,"Version Outdated, please go to https://github.com/Yogpod/redandblackgmod to update\n")
+end
+end
+end)
 
 MENU2_LOADED = true
+MsgC(LightBlue, "\nChecked for updates and all modules were loaded!\n")
