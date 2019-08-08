@@ -36,17 +36,17 @@ for _, v in pairs(Modules) do
 end
 
 
-local version = "2"
+local version = "3"
 http.Fetch( "https://pastebin.com/raw/KXGqugUc",
     function( body )
         versionr = body
 if versionr == version then
 
-    MsgC(Lime,"Your menu version is up to date!\n")
+    MsgC(Aquamarine,"Your menu version is up to date!\n")
 end
 if versionr > version then
 	for i = 1, 100 do
-    MsgC(Lime,"Version Outdated, please go to https://github.com/Yogpod/redandblackgmod to update\n")
+    MsgC(LightBlue,"Version Outdated, please go to https://github.com/Yogpod/redandblackgmod to update\n")
 end
 end
 end)
