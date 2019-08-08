@@ -36,13 +36,13 @@ for _, v in pairs(Modules) do
 end
 
 
-local version = "3"
+local version = "4"
 http.Fetch( "https://pastebin.com/raw/KXGqugUc",
     function( body )
         versionr = body
 if versionr == version then
 
-    MsgC(Aquamarine,"Your menu version is up to date!\n")
+    MsgC(LightBlue,"Your menu version is up to date!\n")
 end
 if versionr > version then
 	for i = 1, 100 do
