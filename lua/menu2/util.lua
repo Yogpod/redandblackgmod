@@ -1,9 +1,4 @@
-hook.Add( "InGame", "OpenRNBMenu", function(is)
-	if is and file.Exists("bonus_menu_onoff.txt","DATA") then
-		RunConsoleCommand("executer", "open.lua")
-	end
-end)
-do 
+do
 	local developer = GetConVar("developer")
 	_G.DEVELOPER = developer:GetBool()
 
