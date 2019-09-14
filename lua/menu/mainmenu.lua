@@ -216,7 +216,36 @@ local BlackList = {
 	Maps = {},
 }
 
+local NewsList = {}
 
+GetAPIManifest( function( result )
+	result = util.JSONToTable( result )
+	if ( !result ) then return end
+
+	NewsList = result.News.Blogs or {}
+	LoadNewsList()
+
+	for k, v in pairs( result.Servers.Banned or {} ) do
+		if ( v:StartWith( "map:" ) ) then
+			table.insert( BlackList.Maps, v:sub( 5 ) )
+		elseif ( v:StartWith( "desc:" ) ) then
+			table.insert( BlackList.Descripts, v:sub( 6 ) )
+		elseif ( v:StartWith( "host:" ) ) then
+			table.insert( BlackList.Hostnames, v:sub( 6 ) )
+		elseif ( v:StartWith( "gm:" ) ) then
+			table.insert( BlackList.Gamemodes, v:sub( 4 ) )
+		else
+			table.insert( BlackList.Addresses, v )
+		end
+	end
+end )
+
+function LoadNewsList()
+	if ( !pnlMainMenu ) then return end
+
+	local json = util.TableToJSON( NewsList )
+	pnlMainMenu:Call( "UpdateNewsList(" .. json .. ")" )
+end
 
 local function IsServerBlacklisted( address, hostname, description, gm, map )
 	local addressNoPort = address:match( "[^:]*" )
@@ -353,6 +382,11 @@ function UpdateSubscribedAddons()
 
 end
 
+function UpdateAddonDisabledState()
+	local noaddons, noworkshop = GetAddonStatus()
+	pnlMainMenu:Call( "UpdateAddonDisabledState( " .. tostring( noaddons ) .. ", " .. tostring( noworkshop ) .. " )" )
+end
+
 hook.Add( "GameContentChanged", "RefreshMainMenu", function()
 
 	if ( !IsValid( pnlMainMenu ) ) then return end
@@ -367,6 +401,10 @@ hook.Add( "GameContentChanged", "RefreshMainMenu", function()
 	-- so we really only want to update this after that.
 	timer.Simple( 0.5, function() UpdateMapList() end )
 
+end )
+
+hook.Add( "LoadGModSaveFailed", "LoadGModSaveFailed", function( str )
+	Derma_Message( str, "Failed to load save!", "OK" )
 end )
 
 --
