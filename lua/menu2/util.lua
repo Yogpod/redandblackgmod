@@ -6,7 +6,8 @@ do
 		return developer:GetInt() >= (n or 1)
 	end
 end
---if IsDeveloper() then
+--[[if IsDeveloper() then
+
 	local function lua_run_menu(_,_,_,code)
 		local func = CompileString(code,"",false)
 		if isstring(func) then
@@ -19,7 +20,7 @@ end
 		end)
 	end
 	concommand.Add("lua_run_menu",lua_run_menu)
---end
+--end]]
 function gamemenucommand(str)
 	RunGameUICommand(str)
 end
