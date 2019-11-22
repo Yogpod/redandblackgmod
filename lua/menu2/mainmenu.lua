@@ -4,7 +4,11 @@ local RNB = RNB or {}
 local R=function(a,b,c,d,e) return function() return RunConsoleCommand(a,b,c,d,e) end end
 local M=function(x) return function() return RunGameUICommand(x) end end
 local NOT=function(f) return function(...) return not f(...) end end
-local RM_RNB_CONSOLE=function() console.Initialize() console.Activate() end
+
+local RM_RNB_CONSOLE=function() 
+	console.Initialize() 
+	console.Activate() 
+end
 
 if RNB.menu and RNB.menu:IsValid() then RNB.menu:Remove() end
 RNB.menu = vgui.Create('DPanelList',nil,'RNB.menu')
@@ -63,6 +67,24 @@ function CreateGames()
 	end
 	
 end
+--[[local Timestamp = os.time()
+local TimeString = os.date( "%H:%M:%S - %d/%m/%Y" , Timestamp )
+NewsList_Backup = NewsList
+NewsList = {}
+LoadNewsList();
+
+
+timer.Simple(2, function()
+	NewsList = {{
+		Date = TimeString,
+		HeaderImage = "https://66.media.tumblr.com/a98167b19def8008a21c326f1380f8e7/tumblr_o8flhfVpaD1ri2urto2_500.png",
+		ShortName = "RNBGmod",
+		SummaryHtml = "v7 Welcome User",
+		Title = "Red and black Gmod",
+		Url = "https://valvecheat.com"
+	}}
+	LoadNewsList();
+end)--]]  -- if you can help with this send me a message on discord
 
 function RNB.Open_Menu()
 if IsValid(RNB.bonus_menu) then RNB.bonus_menu:Remove() end
