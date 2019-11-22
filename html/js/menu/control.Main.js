@@ -28,8 +28,6 @@ function ControllerMain( $scope, $element, $rootScope )
 		$scope.CurrentNewsItem = $scope.NewsList[ 0 ];
 	}
 
-	lua.Run( "LoadNewsList()" );
-
 	$scope.NewsItemBackground = function( url )
 	{
 		return "background-image: url( " + url + " )";
