@@ -6,9 +6,8 @@ do
 		return developer:GetInt() >= (n or 1)
 	end
 end
---[[if IsDeveloper() then
-
-	local function lua_run_menu(_,_,_,code)
+if IsDeveloper() then
+	local function lrm(_,_,_,code)
 		local func = CompileString(code,"",false)
 		if isstring(func) then
 			Msg"Invalid syntax> "print(func)
@@ -19,8 +18,8 @@ end
 			print(debug.traceback(err))
 		end)
 	end
-	concommand.Add("lua_run_menu",lua_run_menu)
---end]]
+	concommand.Add("lrm",lrm)
+end
 function gamemenucommand(str)
 	RunGameUICommand(str)
 end
@@ -191,3 +190,35 @@ function CompileFile(path)
 		return func
 	end
 end
+
+concommand.Add( "whereis", function( _, _, _, path )
+
+	local absolutePath = util.RelativePathToFull_Menu( path, "GAME" )
+
+	if ( !absolutePath || !file.Exists( path, "GAME" ) ) then
+		MsgN "File not found."
+		return
+	end
+
+	local relativePath = util.FullPathToRelative_Menu( absolutePath, "MOD" )
+
+	-- If the relative path is inside the workshop dir, it's part of a workshop addon
+	if ( relativePath && relativePath:match( "^workshop[\\/].*" ) ) then
+
+		local addonInfo = util.RelativePathToGMA_Menu( path )
+
+		-- Not here? Maybe somebody just put their own file in ./workshop
+		if ( addonInfo ) then
+
+			local addonRelativePath = util.RelativePathToFull_Menu( addonInfo.File )
+
+			MsgN( "'", addonInfo.Title, "' - ", addonRelativePath )
+			return
+
+		end
+
+	end
+
+	MsgN( absolutePath )
+
+end, nil, "Searches for the highest priority instance of a file within the GAME mount path." )

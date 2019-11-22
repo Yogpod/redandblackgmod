@@ -4,7 +4,7 @@ hook.Add("OnLuaError", "MenuErrorHandler", function(str, realm, addontitle, addo
     local text = "Something is creating script errors"
 
     if (isstring(addonid)) then
-        text = "The addon \"" .. addontitle .. "\" creates errors, check the console for more details"
+        text = "The addon \"" .. addontitle .. "\" is creating errors, check the console for details."
     end
 
     if (addonid == nil) then

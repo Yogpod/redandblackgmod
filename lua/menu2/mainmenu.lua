@@ -5,18 +5,12 @@ local R=function(a,b,c,d,e) return function() return RunConsoleCommand(a,b,c,d,e
 local M=function(x) return function() return RunGameUICommand(x) end end
 local NOT=function(f) return function(...) return not f(...) end end
 local RM_RNB_CONSOLE=function() console.Initialize() console.Activate() end
-local RM_RNB=function() 
-	if file.Exists("bonus_menu_onoff.txt","DATA") then
-		MsgC(Color(0, 255, 0), "This feature is disabled\n") 
-		file.Delete("bonus_menu_onoff.txt")
-	end
-end
 
-if RNB.bidouillage and RNB.bidouillage:IsValid() then RNB.bidouillage:Remove() end
-RNB.bidouillage = vgui.Create('DPanelList',nil,'RNB.bidouillage')
-RNB.bidouillage:EnableVerticalScrollbar(true)
-RNB.bidouillage:Dock(TOP)
-RNB.bidouillage:DockMargin(0,0,0,0)
+if RNB.menu and RNB.menu:IsValid() then RNB.menu:Remove() end
+RNB.menu = vgui.Create('DPanelList',nil,'RNB.menu')
+RNB.menu:EnableVerticalScrollbar(true)
+RNB.menu:Dock(TOP)
+RNB.menu:DockMargin(0,0,0,0)
 
 local gameslist
 function CreateGames()
