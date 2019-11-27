@@ -14,7 +14,6 @@ local Modules = {
     "menu2/mainmenu.lua",
     "menu2/errors.lua",
     "menu2/openurl2.lua",
-    "menu2/menu_tool.lua",
 }
 local longest = 0
 for _, v in pairs(Message) do
@@ -42,6 +41,7 @@ http.Fetch( "https://pastebin.com/raw/KXGqugUc",
     function( body )
         versionr = body
         if versionr == version then
+
             MsgC(LightBlue,"Your menu version is up to date!\n")
         end
         if versionr > version then
