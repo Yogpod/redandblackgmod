@@ -3,7 +3,7 @@ local Aquamarine = Color(127, 255, 212, 255)
 local LightBlue  = Color(72,  209, 204, 255)
 local Message = {
     "+-------------------oOo-------------------+",
-    "|~ ~ ~ ~ ~ 					~ ~ ~ ~ ~|",
+    "|~ ~ ~ ~ ~                       ~ ~ ~ ~ ~|",
     "|~ ~   RNB Gmod Modification Loaded      ~|",
     "|~ ~                                   ~ ~|",
     "+-------------------oOo-------------------+",
@@ -37,7 +37,7 @@ for _, v in pairs(Modules) do
 end
 
 
-local version = "9"
+local version = "10"
 http.Fetch( "https://pastebin.com/raw/KXGqugUc",
     function( body )
         versionr = body
