@@ -7,6 +7,23 @@ do
 	end
 end
 if IsDeveloper() then
+
+	function lom(path)
+		local f = file.Open(path,'rb','LuaMenu')
+		if not f then
+			ErrorNoHalt("Could not open: "..path..'\n')
+			return
+		end	
+		local str = f:Read(f:Size())
+		f:Close()
+		local func = CompileString(str,'@'..path,false)
+		if isstring(func) then
+			error(func)
+		else
+			return func
+		end
+	end
+
 	local function lrm(_,_,_,code)
 		local func = CompileString(code,"",false)
 		if isstring(func) then
@@ -18,7 +35,9 @@ if IsDeveloper() then
 			print(debug.traceback(err))
 		end)
 	end
-	concommand.Add("lrm",lrm)
+	
+	concommand.Add("lrm",lrm,nil,"Run lua on the menu state.",FCVAR_UNREGISTERED)
+	concommand.Add("lom",lom,nil,"Honestly no idea",FCVAR_UNREGISTERED)
 end
 function gamemenucommand(str)
 	RunGameUICommand(str)
@@ -175,22 +194,8 @@ function SearchWorkshop(str)
 	str = "http://steamcommunity.com/workshop/browse?searchtext="..str.."&childpublishedfileid=0&section=items&appid=4000&browsesort=trend&requiredtags[]=-1"
 	gui.OpenURL(str)
 end
-function CompileFile(path)
-	local f = file.Open(path,'rb','LuaMenu')
-	if not f then
-		ErrorNoHalt("Could not open: "..path..'\n')
-		return
-	end	
-	local str = f:Read(f:Size())
-	f:Close()
-	local func = CompileString(str,'@'..path,false)
-	if isstring(func) then
-		error(func)
-	else
-		return func
-	end
-end
 
+if outdated then R"showconsole"() end
 concommand.Add( "whereis", function( _, _, _, path )
 
 	local absolutePath = util.RelativePathToFull_Menu( path, "GAME" )

@@ -42,13 +42,10 @@ http.Fetch( "https://pastebin.com/raw/KXGqugUc",
     function( body )
         versionr = body
         if versionr == version then
-        	if IsDeveloper() then 
-        		R"showconsole"()
-			end
             MsgC(LightBlue,"Your menu version is up to date!\n")
         end
         if versionr > version then
-        	R"showconsole"()
+            outdated = true
             for i = 1, 100 do
                 MsgC(LightBlue,"Version Outdated, please go to https://github.com/Yogpod/redandblackgmod to update\n")
             end

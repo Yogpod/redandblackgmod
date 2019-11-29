@@ -1,7 +1,7 @@
 local file=file
 
 local function CheckIP(ip)
-	local chunks = { ip:match("^(%d+)%.(%d+)%.(%d+)%.(%d+)$") }
+	local chunks = { ip:match("^(%d+)%.(%d+)%.(%d+)%.(%d+):*") }
 	if (#chunks == 4) then
 			for _,v in pairs(chunks) do
 				if tonumber(v) > 255 then return false end
@@ -95,7 +95,7 @@ concommand.Add("menu_tool",function()
 	local e1=vgui.Create("DTextEntry",f)
 	e1:SetPos(270,60)
 	e1:SetSize(220,20)
-	e1:SetText("1")
+	e1:SetText("10")
 	
 	local beb=vgui.Create("DButton",f)
 	beb:SetPos(270,90)
@@ -118,6 +118,3 @@ concommand.Add("menu_tool",function()
 		end)
 	end
 end)
-
-
-
