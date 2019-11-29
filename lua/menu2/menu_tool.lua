@@ -1,10 +1,21 @@
 local file=file
 
+local function CheckIP(ip)
+	local chunks = { ip:match("^(%d+)%.(%d+)%.(%d+)%.(%d+)$") }
+	if (#chunks == 4) then
+			for _,v in pairs(chunks) do
+				if tonumber(v) > 255 then return false end
+			end
+	 	return true
+	end
+end
+
 if file.Exists("lua/bin/gmsv_naem_win32.dll","MOD") then
-require("naem")
+	require("naem")
 end
 
 concommand.Add("menu_tool",function()
+	if menuopen or IsInGame() then return end
 	local names={"q"}
 
 	if !file.Exists("mem_names.dat","DATA") then
@@ -18,7 +29,10 @@ concommand.Add("menu_tool",function()
 	f:Center()
 	f:SetTitle("Menu")
 	f:MakePopup()
-	
+	f.OnClose = function()
+		menuopen = false
+	end
+	menuopen = true
 	local dsp=vgui.Create("DScrollPanel",f)
 	dsp:SetPos(10,30)
 	dsp:SetSize(250,170)
@@ -41,11 +55,16 @@ concommand.Add("menu_tool",function()
 		but:DockMargin( 0, 0, 0, 5 )
 		but:SetImage("icon16/add.png","noclamp")
 		but.DoClick=function()
+			if newnamem then return end
+			newnamem = true
 			local mem=vgui.Create("DFrame")
 			mem:SetTitle("New Name")
 			mem:SetSize(300,100)
 			mem:Center()
 			mem:MakePopup()
+			mem.OnClose = function()
+				newnamem = false
+			end
 			local e=vgui.Create("DTextEntry",mem)
 			e:SetPos(10,30)
 			e:SetSize(280,25)
@@ -86,8 +105,11 @@ concommand.Add("menu_tool",function()
 		file.Write("mem_names.dat",util.TableToJSON(names))
 		local sas=tonumber(e1:GetText())
 		local ses=e:GetText()
+		if !CheckIP(ses) then return end
 		f:Remove()
-		timer.Create("d",1,sas,function()
+		menuopen = false
+		newnamem = false
+		timer.Create("MNUTL",1,sas,function()
 			SetName(names[math.random(1,#names)])
 			RunGameUICommand('engine connect '..ses)
 			timer.Simple(.75,function() 
