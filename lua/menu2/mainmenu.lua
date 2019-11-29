@@ -75,15 +75,15 @@ LoadNewsList();
 
 
 timer.Simple(2, function()
-	NewsList = {{
-		Date = TimeString,
-		HeaderImage = "https://66.media.tumblr.com/a98167b19def8008a21c326f1380f8e7/tumblr_o8flhfVpaD1ri2urto2_500.png",
-		ShortName = "RNBGmod",
-		SummaryHtml = "v7 Welcome User",
-		Title = "Red and black Gmod",
-		Url = "https://valvecheat.com"
-	}}
-	LoadNewsList();
+    NewsList = {{
+        Date = TimeString,
+        HeaderImage = "https://66.media.tumblr.com/a98167b19def8008a21c326f1380f8e7/tumblr_o8flhfVpaD1ri2urto2_500.png",
+        ShortName = "RNBGmod",
+        SummaryHtml = "v7 Welcome User",
+        Title = "Red and black Gmod",
+        Url = "https://valvecheat.com"
+    }}
+    LoadNewsList();
 end)--]]  -- if you can help with this send me a message on discord
 
 function RNB.Open_Menu()
@@ -101,15 +101,7 @@ function RNB.Open_Menu()
         surface.DrawRect( 0, 0, RNB.bonus_menu:GetWide(), RNB.bonus_menu:GetTall() )
     end
 
-    local bonus_heure = vgui.Create( "DLabel", RNB.bonus_menu )
-    bonus_heure:SetPos( ScrW()-50, 3 )
-    bonus_heure:SetFont("TargetID")
-    bonus_heure:SetColor( Color( 180, 180, 180 ) )
-    bonus_heure:SetText( os.date( "%H:%M") )
-    timer.Create( "refresh_heure_menu2", 5, 0, function()
-        bonus_heure:SetText( os.date( "%H:%M") )
-    end)
-
+--left side
     local bonus_boutton = vgui.Create("DButton", RNB.bonus_menu)
     bonus_boutton:SetText( "" )
     bonus_boutton:SetPos( 5, 0 )
@@ -128,6 +120,7 @@ function RNB.Open_Menu()
     tall=tall<16 and 16 or tall
     bonus_boutton:SetTall(tall)
 
+--disconnect button
     local bonus_boutton = vgui.Create("DButton", RNB.bonus_menu)
     bonus_boutton:SetText( "" )
     bonus_boutton:SetPos( 35, -0.65 )
@@ -146,6 +139,7 @@ function RNB.Open_Menu()
     tall=tall<16 and 16 or tall
     bonus_boutton:SetTall(tall)
 
+--retry button
     local bonus_boutton = vgui.Create("DButton", RNB.bonus_menu)
     bonus_boutton:SetText( "" )
     bonus_boutton:SetPos( 65, -0.65 )
@@ -164,6 +158,7 @@ function RNB.Open_Menu()
     tall=tall<16 and 16 or tall
     bonus_boutton:SetTall(tall)
 
+--newgame button
     local bonus_boutton = vgui.Create("DButton", RNB.bonus_menu)
     bonus_boutton:SetText( "" )
     bonus_boutton:SetPos( 95, -0.6 )
@@ -182,6 +177,7 @@ function RNB.Open_Menu()
     tall=tall<16 and 16 or tall
     bonus_boutton:SetTall(tall)
 
+--server browser button
     local bonus_boutton = vgui.Create("DButton", RNB.bonus_menu)
     bonus_boutton:SetText( "" )
     bonus_boutton:SetPos( 125, -0.6 )
@@ -200,6 +196,7 @@ function RNB.Open_Menu()
     tall=tall<16 and 16 or tall
     bonus_boutton:SetTall(tall)
 
+--settings button
     local bonus_boutton = vgui.Create("DButton", RNB.bonus_menu)
     bonus_boutton:SetText( "" )
     bonus_boutton:SetPos( 155, -0.6 )
@@ -218,6 +215,7 @@ function RNB.Open_Menu()
     tall=tall<16 and 16 or tall
     bonus_boutton:SetTall(tall)
 
+--quitnoconfirm button
     local bonus_boutton = vgui.Create("DButton", RNB.bonus_menu)
     bonus_boutton:SetText( "" )
     bonus_boutton:SetPos( 185, -0.65 )
@@ -236,27 +234,24 @@ function RNB.Open_Menu()
     tall=tall<16 and 16 or tall
     bonus_boutton:SetTall(tall)
 
-    local bonus_boutton = vgui.Create("DButton", RNB.bonus_menu)
-    bonus_boutton:SetText( "" )
-    bonus_boutton:SetPos( ScrW()-175, -0.6 )
-    bonus_boutton.Paint = function( self, w, h )
-        draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 0) )
-    end
-    bonus_boutton.DoClick = function()
-        RM_RNB_CONSOLE()
-        bonus_boutton:SetSelected(false)
-    end
-    bonus_boutton:SetImage("icon16/application_osx_terminal.png")
-    bonus_boutton:InvalidateLayout(true)
-    bonus_boutton:SetTextInset( 16+ 16, -0.6 )
-    bonus_boutton:SetContentAlignment(4)
-    local tall = bonus_boutton:GetTall()+4
-    tall=tall<16 and 16 or tall
-    bonus_boutton:SetTall(tall)
 
+--right side
+    --clock
+    local TimeStamp = os.time()
+    local TimeString = os.date( "%H:%M:%S" , Timestamp )
+    local bonus_hour = vgui.Create( "DLabel", RNB.bonus_menu )
+    bonus_hour:SetPos( ScrW()-75, 3 )
+    bonus_hour:SetFont("TargetID")
+    bonus_hour:SetColor( Color( 180, 180, 180 ) )
+    bonus_hour:SetText( TimeString )
+    local TimeStamp = os.time()
+    timer.Create( "refresh_hour_menu2", 5, 0, function()
+        bonus_hour:SetText( os.date( "%H:%M" , Timestamp ) )
+    end)
+ --console button
     local bonus_boutton = vgui.Create("DButton", RNB.bonus_menu)
     bonus_boutton:SetText( "" )
-    bonus_boutton:SetPos( ScrW()-145, -0.6 )
+    bonus_boutton:SetPos( ScrW()-115, -0.6 )
     bonus_boutton.Paint = function( self, w, h )
         draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 0) )
     end
@@ -264,24 +259,9 @@ function RNB.Open_Menu()
         R"showconsole"()
         bonus_boutton:SetSelected(false)
     end
-    bonus_boutton:SetImage("icon16/application_xp_terminal.png")
+    bonus_boutton:SetImage("icon16/application_osx_terminal.png")
     bonus_boutton:InvalidateLayout(true)
-    bonus_boutton:SetTextInset( 16+ 16, 0 )
-    bonus_boutton:SetContentAlignment(4)
-    local tall = bonus_boutton:GetTall()+4
-    tall=tall<16 and 16 or tall
-    bonus_boutton:SetTall(tall)
-
-    local bonus_boutton = vgui.Create("DButton", RNB.bonus_menu)
-    bonus_boutton:SetText( "" )
-    bonus_boutton:SetPos( ScrW()-115, -0.6 )
-    bonus_boutton.Paint = function( self, w, h )
-        draw.RoundedBox(0, 0, 0, w, h, Color(0, 0, 0, 0) )
-    end
-
-    bonus_boutton:SetImage("icon16/bug.png")
-    bonus_boutton:InvalidateLayout(true)
-    bonus_boutton:SetTextInset( 16+ 16, 0 )
+    bonus_boutton:SetTextInset( 16+ 16, -0.6 )
     bonus_boutton:SetContentAlignment(4)
     local tall = bonus_boutton:GetTall()+4
     tall=tall<16 and 16 or tall
