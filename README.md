@@ -13,7 +13,7 @@ Drop all these folders into /garrysmod for red and black gmod menu, console, and
 	 watch some little thing spin for 20 minutes.
 
 ### Chat Spam module
-	Taken from https://bit.ly/2so4tV0 & improved upon, updated for that new update that changed max name bytes 
+	Taken from [here](https://bit.ly/2so4tV0)https://bit.ly/2so4tV0 & improved upon, updated for that new update that changed max name bytes 
 	to 128, stopped people from opening way too many windows or just connecting to something that didnt 
 	even resemble an ip.
 
