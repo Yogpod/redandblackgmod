@@ -37,7 +37,7 @@ for _, v in pairs(Modules) do
 end
 
 
-local version = "10"
+local version = "11"
 http.Fetch( "https://pastebin.com/raw/KXGqugUc",
     function( body )
         versionr = body
