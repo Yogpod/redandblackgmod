@@ -1,14 +1,10 @@
 include( 'openurl2.lua' )
-require("console")
+
 local RNB = RNB or {}
 local R=function(a,b,c,d,e) return function() return RunConsoleCommand(a,b,c,d,e) end end
 local M=function(x) return function() return RunGameUICommand(x) end end
 local NOT=function(f) return function(...) return not f(...) end end
 
-local RM_RNB_CONSOLE=function()
-    console.Initialize()
-    console.Activate()
-end
 
 if RNB.menu and RNB.menu:IsValid() then RNB.menu:Remove() end
 RNB.menu = vgui.Create('DPanelList',nil,'RNB.menu')
