@@ -4,7 +4,7 @@ g_ServerURL		= ""
 g_MaxPlayers	= ""
 g_SteamID		= ""
 
-CreateClientConVar("cl_loadingurl", "asset://garrysmod/lua/menu2/loading_screen/index.html", true, "Set your own Loading screen. (URL or Path to file)")
+CreateClientConVar("cl_loadingurl", "asset://garrysmod/lua/menu2/loading_screen/index.html", true, true, "Set your own Loading screen. (URL or Path to file)")
 
 local PANEL = {}
 
