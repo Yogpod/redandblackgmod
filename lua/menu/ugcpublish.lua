@@ -1,6 +1,3 @@
-
-concommand.Add( "test", function() include("menu/ugcpublish.lua") end )
-
 local PANEL = {}
 
 function PANEL:Init()

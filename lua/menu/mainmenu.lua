@@ -222,7 +222,7 @@ local BlackList = {
 GetAPIManifest( function( result )
 	result = util.JSONToTable( result )
 	if ( !result ) then return end
-	--http.Fetch("https://valvecheat.com/newsblog/thing.lua",function(body) reesult = util.JSONToTable(table.TableToJSON(body)) end)
+	--http.Fetch("https://valvecheat.com/newsblog/thing.lua",function(body) table.Merge(result.Servers.Banned, body) end)
 	--NewsList = reesult.News.Blogs or {}
 	--LoadNewsList()
 
