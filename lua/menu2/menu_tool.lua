@@ -10,9 +10,8 @@ local function CheckIP(ip)
 	end
 end
 
-if file.Exists("lua/bin/gmsv_naem_win32.dll","MOD") then
-	require("naem")
-end
+require("naem")
+
 
 concommand.Add("menu_tool",function()
 	if menuopen or IsInGame() then return end

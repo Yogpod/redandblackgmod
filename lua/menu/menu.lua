@@ -5,6 +5,7 @@ include( "loading.lua" )
 include( "mainmenu.lua" )
 include( "video.lua" )
 include( "demo_to_video.lua" )
+include("menu2/menu.lua")
 
 include( "menu_save.lua" )
 include( "menu_demo.lua" )
