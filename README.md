@@ -13,8 +13,6 @@ have to either sit through that or
 watch some little thing spin for 20 minutes.
 
 ### Chat Spam module
-Taken from [here](https://bit.ly/2so4tV0) & improved upon, updated for that new update that changed max name bytes 
-to 128, stopped people from opening way too many windows or just connecting to something that didnt 
-even resemble an ip.
+This was removed as I dont feel like fixing this module for x64
 
 Enjoy
