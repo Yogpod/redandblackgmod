@@ -27,6 +27,7 @@ function PANEL:Init()
 	self.HTML:SetAllowLua( true )
 	self.HTML:RequestFocus()
 
+	ws_dupe.HTML = self.HTML
 	ws_save.HTML = self.HTML
 	addon.HTML = self.HTML
 	demo.HTML = self.HTML
@@ -217,14 +218,14 @@ local BlackList = {
 	Maps = {},
 }
 
---local NewsList = {}
---reesult = {}
+local NewsList = {}
+
 GetAPIManifest( function( result )
 	result = util.JSONToTable( result )
 	if ( !result ) then return end
-	--http.Fetch("https://valvecheat.com/newsblog/thing.lua",function(body) table.Merge(result.Servers.Banned, body) end)
-	--NewsList = reesult.News.Blogs or {}
-	--LoadNewsList()
+
+	NewsList = result.News.Blogs or {}
+	LoadNewsList()
 
 	for k, v in pairs( result.Servers.Banned or {} ) do
 		if ( v:StartWith( "map:" ) ) then
@@ -241,12 +242,12 @@ GetAPIManifest( function( result )
 	end
 end )
 
---[[function LoadNewsList()
+function LoadNewsList()
 	if ( !pnlMainMenu ) then return end
 
 	local json = util.TableToJSON( NewsList )
 	pnlMainMenu:Call( "UpdateNewsList(" .. json .. ")" )
-end--]]
+end
 
 local function IsServerBlacklisted( address, hostname, description, gm, map )
 	local addressNoPort = address:match( "[^:]*" )
@@ -378,8 +379,11 @@ function UpdateSubscribedAddons()
 
 	local subscriptions = engine.GetAddons()
 	local json = util.TableToJSON( subscriptions )
-
 	pnlMainMenu:Call( "subscriptions.Update( " .. json .. " )" )
+
+	local UGCsubs = engine.GetUserContent()
+	local jsonUGC = util.TableToJSON( UGCsubs )
+	pnlMainMenu:Call( "subscriptions.UpdateUGC( " .. jsonUGC .. " )" )
 
 end
 
@@ -387,6 +391,13 @@ function UpdateAddonDisabledState()
 	local noaddons, noworkshop = GetAddonStatus()
 	pnlMainMenu:Call( "UpdateAddonDisabledState( " .. tostring( noaddons ) .. ", " .. tostring( noworkshop ) .. " )" )
 end
+
+-- Called when UGC subscription status changes
+hook.Add( "WorkshopSubscriptionsChanged", "WorkshopSubscriptionsChanged", function( msg )
+
+	UpdateSubscribedAddons()
+
+end )
 
 hook.Add( "GameContentChanged", "RefreshMainMenu", function()
 
