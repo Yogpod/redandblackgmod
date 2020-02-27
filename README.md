@@ -13,6 +13,6 @@ have to either sit through that or
 watch some little thing spin for 20 minutes.
 
 ### Chat Spam module
-This was removed as I dont feel like fixing this module for x64
+This was removed.
 
 Enjoy
