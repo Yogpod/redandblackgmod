@@ -218,14 +218,14 @@ local BlackList = {
 	Maps = {},
 }
 
---local NewsList = {}
---reesult = {}
+local NewsList = {}
+
 GetAPIManifest( function( result )
 	result = util.JSONToTable( result )
 	if ( !result ) then return end
-	--http.Fetch("https://valvecheat.com/newsblog/thing.lua",function(body) table.Merge(result.Servers.Banned, body) end)
-	--NewsList = reesult.News.Blogs or {}
-	--LoadNewsList()
+
+	NewsList = result.News.Blogs or {}
+	LoadNewsList()
 
 	for k, v in pairs( result.Servers.Banned or {} ) do
 		if ( v:StartWith( "map:" ) ) then
@@ -242,12 +242,12 @@ GetAPIManifest( function( result )
 	end
 end )
 
---[[function LoadNewsList()
+function LoadNewsList()
 	if ( !pnlMainMenu ) then return end
 
 	local json = util.TableToJSON( NewsList )
 	pnlMainMenu:Call( "UpdateNewsList(" .. json .. ")" )
-end--]]
+end
 
 local function IsServerBlacklisted( address, hostname, description, gm, map )
 	local addressNoPort = address:match( "[^:]*" )

@@ -14,7 +14,6 @@ local Modules = {
     "menu2/mainmenu.lua",
     "menu2/errors.lua",
     "menu2/openurl2.lua",
-    "menu2/menu_tool.lua",
 }
 local longest = 0
 for _, v in pairs(Message) do
