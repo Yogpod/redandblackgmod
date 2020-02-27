@@ -37,20 +37,18 @@ for _, v in pairs(Modules) do
 end
 
 
-local version = "12"
-http.Fetch( "https://pastebin.com/raw/KXGqugUc",
-    function( body )
-        versionr = body
-        if versionr == version then
-            MsgC(LightBlue,"Your menu version is up to date!\n")
+local version = "13"
+http.Fetch( "https://pastebin.com/raw/KXGqugUc", function( body )
+    if body == version then
+        MsgC(LightBlue,"Your menu version is up to date!\n")
+    end
+    if body > version then
+        outdated = true
+        for i = 1, 100 do
+            MsgC(LightBlue,"Version Outdated, please go to https://github.com/Yogpod/redandblackgmod to update\n")
         end
-        if versionr > version then
-            outdated = true
-            for i = 1, 100 do
-                MsgC(LightBlue,"Version Outdated, please go to https://github.com/Yogpod/redandblackgmod to update\n")
-            end
-        end
-    end)
+     end
+end)
 
 MENU2_LOADED = true
 MsgC(LightBlue, "\nChecked for updates and all modules were loaded!\n")
