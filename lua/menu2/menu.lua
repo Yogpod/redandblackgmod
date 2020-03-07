@@ -1,6 +1,7 @@
 local Lime = Color(127, 255, 0, 255)
 local Aquamarine = Color(127, 255, 212, 255)
 local LightBlue  = Color(72,  209, 204, 255)
+
 local Message = {
     "+-------------------oOo-------------------+",
     "|~ ~ ~ ~ ~                       ~ ~ ~ ~ ~|",
@@ -8,6 +9,7 @@ local Message = {
     "|~ ~                                   ~ ~|",
     "+-------------------oOo-------------------+",
 }
+
 local Modules = {
     "menu2/util.lua",
     "menu2/fuckloadingscreen.lua",
@@ -15,11 +17,14 @@ local Modules = {
     "menu2/errors.lua",
     "menu2/openurl2.lua",
 }
+
 local longest = 0
+
 for _, v in pairs(Message) do
     if v:len() > longest then longest = v:len() end
 end
 MsgN()
+
 for _, line in pairs(Message) do
     for i=1, line:len() do
         local hue = ((i-1) / longest) * 360
@@ -28,6 +33,7 @@ for _, line in pairs(Message) do
     MsgN()
 end
 MsgN()
+
 for _, v in pairs(Modules) do
     MsgC(Aquamarine, "Loading the modules ")
     MsgC(Lime, v)

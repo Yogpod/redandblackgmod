@@ -1,9 +1,23 @@
 include( 'openurl2.lua' )
 
 local RNB = RNB or {}
-local R=function(a,b,c,d,e) return function() return RunConsoleCommand(a,b,c,d,e) end end
-local M=function(x) return function() return RunGameUICommand(x) end end
-local NOT=function(f) return function(...) return not f(...) end end
+
+local R = function(a,b,c,d,e)
+    return function()
+        return RunConsoleCommand(a,b,c,d,e)
+    end
+end
+
+local M = function(x)
+    return function()
+        return RunGameUICommand(x)
+    end
+end
+local NOT = function(f)
+        return function(...)
+        return not f(...)
+    end
+end
 
 
 if RNB.menu and RNB.menu:IsValid() then RNB.menu:Remove() end
@@ -15,7 +29,7 @@ RNB.menu:DockMargin(0,0,0,0)
 local gameslist
 function CreateGames()
 
-    if gameslist and gameslist:IsValid() then gameslist:Remove() gameslist=nil end
+    if gameslist and gameslist:IsValid() then gameslist:Remove() gameslist = nil end
 
     gameslist = vgui.Create('DForm',menulist_wrapper,'gameslist')
     gameslist:Dock(TOP)
@@ -46,9 +60,9 @@ function CreateGames()
         btn:InvalidateLayout(true)
     end
 
-    local t=engine.GetGames()
+    local t = engine.GetGames()
     table.sort(t,function(a,b)
-        if a.mounted==b.mounted then
+        if a.mounted == b.mounted then
             if a.mounted then
                 return a.depot<b.depot
             else
@@ -113,7 +127,7 @@ function RNB.Open_Menu()
     bonus_boutton:SetTextInset( 16+ 16, 0 )
     bonus_boutton:SetContentAlignment(4)
     local tall = bonus_boutton:GetTall()+4
-    tall=tall<16 and 16 or tall
+    tall = tall<16 and 16 or tall
     bonus_boutton:SetTall(tall)
 
 --disconnect button
@@ -132,7 +146,7 @@ function RNB.Open_Menu()
     bonus_boutton:SetTextInset( 16+ 16, 0 )
     bonus_boutton:SetContentAlignment(4)
     local tall = bonus_boutton:GetTall()+4
-    tall=tall<16 and 16 or tall
+    tall = tall<16 and 16 or tall
     bonus_boutton:SetTall(tall)
 
 --retry button
@@ -151,7 +165,7 @@ function RNB.Open_Menu()
     bonus_boutton:SetTextInset( 16+ 16, 0 )
     bonus_boutton:SetContentAlignment(4)
     local tall = bonus_boutton:GetTall()+4
-    tall=tall<16 and 16 or tall
+    tall = tall<16 and 16 or tall
     bonus_boutton:SetTall(tall)
 
 --newgame button
@@ -170,7 +184,7 @@ function RNB.Open_Menu()
     bonus_boutton:SetTextInset( 16+ 16, 0 )
     bonus_boutton:SetContentAlignment(4)
     local tall = bonus_boutton:GetTall()+4
-    tall=tall<16 and 16 or tall
+    tall = tall<16 and 16 or tall
     bonus_boutton:SetTall(tall)
 
 --server browser button
@@ -189,7 +203,7 @@ function RNB.Open_Menu()
     bonus_boutton:SetTextInset( 16+ 16, 0 )
     bonus_boutton:SetContentAlignment(4)
     local tall = bonus_boutton:GetTall()+4
-    tall=tall<16 and 16 or tall
+    tall = tall<16 and 16 or tall
     bonus_boutton:SetTall(tall)
 
 --settings button
@@ -208,7 +222,7 @@ function RNB.Open_Menu()
     bonus_boutton:SetTextInset( 16+ 16, 0 )
     bonus_boutton:SetContentAlignment(4)
     local tall = bonus_boutton:GetTall()+4
-    tall=tall<16 and 16 or tall
+    tall = tall<16 and 16 or tall
     bonus_boutton:SetTall(tall)
 
 --quitnoconfirm button
@@ -227,7 +241,7 @@ function RNB.Open_Menu()
     bonus_boutton:SetTextInset( 16+ 16, 0 )
     bonus_boutton:SetContentAlignment(4)
     local tall = bonus_boutton:GetTall()+4
-    tall=tall<16 and 16 or tall
+    tall = tall<16 and 16 or tall
     bonus_boutton:SetTall(tall)
 
 
@@ -260,7 +274,7 @@ function RNB.Open_Menu()
     bonus_boutton:SetTextInset( 16+ 16, -0.6 )
     bonus_boutton:SetContentAlignment(4)
     local tall = bonus_boutton:GetTall()+4
-    tall=tall<16 and 16 or tall
+    tall = tall<16 and 16 or tall
     bonus_boutton:SetTall(tall)
 end
 
