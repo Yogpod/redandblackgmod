@@ -6,9 +6,8 @@ do
 		return developer:GetInt() >= (n or 1)
 	end
 end
-if IsDeveloper() then
 
-	function lom(path)
+	local function lom(path)
 		local f = file.Open(path,'rb','LuaMenu')
 		if not f then
 			ErrorNoHalt("Could not open: "..path..'\n')
@@ -38,7 +37,7 @@ if IsDeveloper() then
 	
 	concommand.Add("lrm",lrm,nil,"Run lua on the menu state.",FCVAR_UNREGISTERED)
 	concommand.Add("lom",lom,nil,"Honestly no idea",FCVAR_UNREGISTERED)
-end
+
 function gamemenucommand(str)
 	RunGameUICommand(str)
 end
@@ -240,8 +239,7 @@ end
 
 function rejoinlast()
 	ip = file.Read("lastserver.txt","DATA")
-	if !ValidateIP(ip) then error("No previous server.") return end
-	print(ip)
+	if !ValidateIP(ip) then MsgN("No previous server.") return end
 	JoinServer(ip)
 end
 
