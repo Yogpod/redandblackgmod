@@ -228,14 +228,27 @@ concommand.Add( "whereis", function( _, _, _, path )
 
 end, nil, "Searches for the highest priority instance of a file within the GAME mount path." )
 
-function writelast(ip)
-	file.Write("lastserver.txt",ip)
+local function ValidateIP(ip)
+	local chunks = { ip:match("^(%d+)%.(%d+)%.(%d+)%.(%d+):*") }
+	if (#chunks == 4) then
+			for _,v in pairs(chunks) do
+				if tonumber(v) > 255 then return false end
+			end
+	 	return true
+	end
 end
 
 function rejoinlast()
 	ip = file.Read("lastserver.txt","DATA")
+	if !ValidateIP(ip) then error("No previous server.") return end
 	print(ip)
-	gamemenucommand("engine connect " .. ip)
+	JoinServer(ip)
 end
 
 concommand.Add("rejoinlast",rejoinlast)
+
+OriginalJoinServer = JoinServer
+function JoinServer(ip)
+	file.Write("lastserver.txt",ip)
+	OriginalJoinServer(ip)
+end

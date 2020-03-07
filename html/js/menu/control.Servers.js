@@ -124,7 +124,6 @@ function ControllerServers( $scope, $element, $rootScope, $location )
 			lua.Run( "RunConsoleCommand( \"password\", \"" + gm.password + "\" )" )
 
 		lua.Run( "JoinServer( \"" + gm.address + "\" )" )
-		lua.Run("writelast('"+gm.address+"')")
 		$scope.DoStopRefresh();
 	}
 
