@@ -227,3 +227,14 @@ concommand.Add( "whereis", function( _, _, _, path )
 	MsgN( absolutePath )
 
 end, nil, "Searches for the highest priority instance of a file within the GAME mount path." )
+
+function writelast(ip)
+	file.Write("lastserver.txt",ip)
+end
+
+function rejoinlast(ip)
+	ip = file.Read("lastserver.txt","DATA")
+	gamemenucommand("engine","connect",ip)
+end
+
+concommand.Add("rejoinlast",rejoinlast)

@@ -56,6 +56,7 @@ function ControllerServers( $scope, $element, $rootScope, $location )
 
 		if ( server.DoubleClick )
 		{
+			lua.Run("writelast('"+server.address+"'")
 			$scope.JoinServer( server );
 			return;
 		}
