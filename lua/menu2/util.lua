@@ -232,9 +232,10 @@ function writelast(ip)
 	file.Write("lastserver.txt",ip)
 end
 
-function rejoinlast(ip)
+function rejoinlast()
 	ip = file.Read("lastserver.txt","DATA")
-	gamemenucommand("engine","connect",ip)
+	print(ip)
+	gamemenucommand("engine connect " .. ip)
 end
 
 concommand.Add("rejoinlast",rejoinlast)
