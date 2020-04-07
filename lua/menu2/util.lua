@@ -228,12 +228,14 @@ concommand.Add( "whereis", function( _, _, _, path )
 end, nil, "Searches for the highest priority instance of a file within the GAME mount path." )
 
 local function ValidateIP(ip)
-	local chunks = { ip:match("^(%d+)%.(%d+)%.(%d+)%.(%d+):*") }
-	if (#chunks == 4) then
-			for _,v in pairs(chunks) do
-				if tonumber(v) > 255 then return false end
-			end
-	 	return true
+	if ip then
+		local chunks = { ip:match("^(%d+)%.(%d+)%.(%d+)%.(%d+):*") }
+		if (#chunks == 4) then
+				for _,v in pairs(chunks) do
+					if tonumber(v) > 255 then return false end
+				end
+			return true
+		end
 	end
 end
 
