@@ -178,7 +178,7 @@ function UpdateServerSettings()
 
 		local Settings = util.KeyValuesToTable( settings_file )
 
-		if ( Settings.settings ) then
+		if ( istable( Settings.settings ) ) then
 
 			array.settings = Settings.settings
 
@@ -223,11 +223,17 @@ local NewsList = {}
 GetAPIManifest( function( result )
 	result = util.JSONToTable( result )
 	if ( !result ) then return end
-	--table.insert(result.Servers.Banned,"host:Moat.gg")
-	table.insert(result.Servers.Banned,"host:Superior")
-	table.insert(result.Servers.Banned,"host:Moat.gg")
-	NewsList = result.News.Blogs or {}
-	LoadNewsList()
+
+	--NewsList = result.News and result.News.Blogs or {}
+	--LoadNewsList()
+
+	if file.Exists("blockbservers.txt") then
+		local a = {"█", "▇", "▅"}
+		for k,v in pairs(a) do
+			table.insert(BlackList.Hostnames,v)
+			table.insert(BlackList.Gamemodes,v)
+		end
+	end
 
 	for k, v in pairs( result.Servers and result.Servers.Banned or {} ) do
 		if ( v:StartWith( "map:" ) ) then
@@ -247,8 +253,8 @@ end )
 function LoadNewsList()
 	if ( !pnlMainMenu ) then return end
 
-	local json = util.TableToJSON( NewsList )
-	pnlMainMenu:Call( "UpdateNewsList(" .. json .. ")" )
+	--local json = util.TableToJSON( NewsList )
+	--pnlMainMenu:Call( "UpdateNewsList(" .. json .. ")" )
 end
 
 local function IsServerBlacklisted( address, hostname, description, gm, map )
@@ -298,7 +304,7 @@ function GetServers( category, id )
 	ShouldStop[ category ] = false
 	Servers[ category ] = {}
 
-		local data = {
+	local data = {
 		Callback = function( ping, name, desc, map, players, maxplayers, botplayers, pass, lastplayed, address, gm, workshopid )
 
 			if Servers[ category ] && Servers[ category ][ address ] then print( "Server Browser Error!", address, category ) return end
@@ -431,7 +437,7 @@ timer.Simple( 0, function()
 	pnlMainMenu = vgui.Create( "MainMenuPanel" )
 	pnlMainMenu:Call( "UpdateVersion( '" .. VERSIONSTR:JavascriptSafe() .. "', '" .. BRANCH:JavascriptSafe() .. "' )" )
 
-	local language = GetConVar( "gmod_language" ):GetString()
+	local language = GetConVarString( "gmod_language" )
 	LanguageChanged( language )
 
 	hook.Run( "GameContentChanged" )
