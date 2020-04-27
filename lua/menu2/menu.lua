@@ -52,6 +52,9 @@ http.Fetch( "https://pastebin.com/raw/KXGqugUc", function( body )
         for i = 1, 100 do
             MsgC(LightBlue,"Version Outdated, please go to https://github.com/Yogpod/redandblackgmod to update\n")
         end
+        for i = 1,2 do
+            surface.PlaySound( "ambient/alarms/klaxon1.wav" )
+        end
      end
 end)
 

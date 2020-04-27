@@ -228,7 +228,7 @@ GetAPIManifest( function( result )
 	--LoadNewsList()
 
 	if file.Exists("blockbservers.txt","DATA") then
-		local a = {"█▇", "█▅","▇▅"}
+		local a = {"██","█▇", "█▅","▇▅"}
 		for k,v in pairs(a) do
 			table.insert(BlackList.Hostnames,v)
 			table.insert(BlackList.Gamemodes,v)
