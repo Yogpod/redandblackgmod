@@ -5,8 +5,8 @@ local LightBlue  = Color(72,  209, 204, 255)
 local Message = {
     "+-------------------oOo-------------------+",
     "|~ ~ ~ ~ ~                       ~ ~ ~ ~ ~|",
-    "|~ ~   RNB Gmod Modification Loaded      ~|",
-    "|~ ~                                   ~ ~|",
+    "|~ ~   RNB Gmod Modification Loaded    ~ ~|",
+    "|~                                       ~|",
     "+-------------------oOo-------------------+",
 }
 

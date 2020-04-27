@@ -234,14 +234,14 @@ function GameDetails( servername, serverurl, mapname, maxplayers, steamid, gamem
 	g_SteamID		= steamid
 	g_GameMode		= gamemode
 
-	if serverurl == "" then serverurl = g_ServerURL else serverurl = GetConVar( "cl_loadingurl" ):GetString() end
-
 	MsgN( servername )
 	MsgN( serverurl )
 	MsgN( gamemode )
 	MsgN( mapname )
 	MsgN( maxplayers )
 	MsgN( steamid )
+
+	if serverurl == "" then serverurl = g_ServerURL else serverurl = GetConVar( "cl_loadingurl" ):GetString() end
 
 	serverurl = serverurl:Replace( "%s", steamid )
 	serverurl = serverurl:Replace( "%m", mapname )
