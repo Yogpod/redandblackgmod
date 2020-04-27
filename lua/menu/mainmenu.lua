@@ -227,7 +227,7 @@ GetAPIManifest( function( result )
 	--NewsList = result.News and result.News.Blogs or {}
 	--LoadNewsList()
 
-	if file.Exists("blockbservers.txt") then
+	if file.Exists("blockbservers.txt","DATA") then
 		local a = {"█", "▇", "▅"}
 		for k,v in pairs(a) do
 			table.insert(BlackList.Hostnames,v)
