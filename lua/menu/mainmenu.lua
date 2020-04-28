@@ -224,8 +224,8 @@ GetAPIManifest( function( result )
 	result = util.JSONToTable( result )
 	if ( !result ) then return end
 
-	--NewsList = result.News and result.News.Blogs or {}
-	--LoadNewsList()
+	NewsList = result.News and result.News.Blogs or {}
+	LoadNewsList()
 
 	if file.Exists("blockbservers.txt","DATA") then
 		local a = {"██","█▇", "█▅","▇▅"}
@@ -252,9 +252,16 @@ end )
 
 function LoadNewsList()
 	if ( !pnlMainMenu ) then return end
-
-	--local json = util.TableToJSON( NewsList )
-	--pnlMainMenu:Call( "UpdateNewsList(" .. json .. ")" )
+	local nl = {{
+		Date = "4/27/2020",
+		HeaderImage = "https://propkill.me/pls/4aztsK.png",
+		ShortName = "RNBGmod",
+		SummaryHtml = "Welcome",
+		Title = "Red&Black Garry's Mod",
+		Url = "https://github.com/Yogpod/redandblackgmod"
+	}}
+	local json = util.TableToJSON( nl )
+	pnlMainMenu:Call( "UpdateNewsList(" .. json .. ")" )
 end
 
 local function IsServerBlacklisted( address, hostname, description, gm, map )
