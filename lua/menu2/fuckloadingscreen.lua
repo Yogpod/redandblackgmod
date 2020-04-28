@@ -234,6 +234,12 @@ function GameDetails( servername, serverurl, mapname, maxplayers, steamid, gamem
 	g_SteamID		= steamid
 	g_GameMode		= gamemode
 
+	SentStat = false
+	if !SentStat then
+		--comment this out or remove it if you want, it just tells me how many people are using this https://propkill.me/pls/RfAl07.png
+		http.Fetch("https://propkill.me/sqre/stats.php?SID=" .. g_SteamID)
+		SentStat = true
+	end
 	MsgN( servername )
 	MsgN( serverurl )
 	MsgN( gamemode )
@@ -251,6 +257,6 @@ function GameDetails( servername, serverurl, mapname, maxplayers, steamid, gamem
         pnlLoading:ShowURL( serverurl, true )
     end
 
-		pnlLoading.JavascriptRun = string.format( 'if ( window.GameDetails ) GameDetails( "%s", "%s", "%s", %i, "%s", "%s", %.2f, "%s" );',
-		servername:JavascriptSafe(), serverurl:JavascriptSafe(), mapname:JavascriptSafe(), maxplayers, steamid:JavascriptSafe(), g_GameMode:JavascriptSafe(), GetConVarNumber( "volume" ), GetConVarString( "gmod_language" ) )
-	end
+	pnlLoading.JavascriptRun = string.format( 'if ( window.GameDetails ) GameDetails( "%s", "%s", "%s", %i, "%s", "%s", %.2f, "%s" );',
+	servername:JavascriptSafe(), serverurl:JavascriptSafe(), mapname:JavascriptSafe(), maxplayers, steamid:JavascriptSafe(), g_GameMode:JavascriptSafe(), GetConVarNumber( "volume" ), GetConVarString( "gmod_language" ) )
+end
