@@ -14,7 +14,7 @@ end
 
 function a.read(fd, _, align)
   local cur = fd:seek()
-  
+
   if cur % align ~= 0 then
     fd:seek("cur", align - (cur % align))
   end

@@ -18,7 +18,7 @@ end
 
 function test.eq(x, y)
   if type(x) ~= type(y) then return false end
-  
+
   if type(x) == 'table' then
     for k,v in pairs(x) do
       if not test.eq(v, y[k]) then return false end
@@ -41,7 +41,7 @@ end
 -- record the results of the test
 -- test is the name
 -- result is the boolean pass/fail
--- message is an optional string, and will be displayed to the user as 
+-- message is an optional string, and will be displayed to the user as
 -- "note" or "fail" depending on the value of result
 function test.record(name, result, data, message)
   table.insert(test.current_group, { name=name, result=result, message=message, data=data })
@@ -57,7 +57,7 @@ end
 function test.autotest(name, format, ibuf, ival, obuf, oval)
   local eq = test.eq
   local record = test.record
-  
+
   obuf = obuf or ibuf
   oval = oval or ival
 
@@ -121,13 +121,13 @@ function test.report()
         end
       end
     end
-    
+
     print("\tTotal: ", #group)
     print("\tFailed:", failed)
     print()
     allfailed = allfailed + failed
   end
-  
+
   return allfailed
 end
 

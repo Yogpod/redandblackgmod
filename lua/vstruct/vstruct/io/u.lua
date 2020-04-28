@@ -6,18 +6,18 @@ local u = {}
 function u.read(_, buf)
   local n = 0
   local e = io("endianness", "get")
-  
+
   local sof,eof,step
   if e == "big" then
     sof,eof,step = 1,#buf,1
   else
     sof,eof,step = #buf,1,-1
   end
-  
+
   for i=sof,eof,step do
     n = n * 256 + buf:byte(i,i)
   end
-  
+
   return n
 end
 
@@ -33,7 +33,7 @@ function u.write(_, data, size)
   local s = ""
   local e = io("endianness", "get")
   data = math.trunc(data)
-  
+
   for i=1,size do
     if e == "big" then
       s = string.char(data % 256) .. s
@@ -42,7 +42,7 @@ function u.write(_, data, size)
     end
     data = math.trunc(data/256)
   end
-  
+
   return s
 end
 

@@ -42,7 +42,7 @@ function Name:__init(key, child)
   self.size = child.size
   self.key = key
 end
-  
+
 function Name:read(fd, data)
   return put(data, self.key, self.child:read(fd, data))
 end

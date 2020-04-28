@@ -17,11 +17,11 @@ elseif arg then
   -- see if we can figure out where we were loaded from
   local libdir = arg[0]:gsub("[^/\\]+$", "").."../"
   package.path = package.path..";"..libdir.."?.lua;"..libdir.."?/init.lua"
-  
+
   -- clear "failure" entries in package.path
   package.loaded["vstruct.test.common"] = nil
   package.loaded["vstruct"] = nil
-  
+
   -- retry
   test = require "vstruct.test.common"
 else

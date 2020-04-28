@@ -19,8 +19,8 @@ local function iorequire(format)
   end
 
   setmetatable(v, mt)
-  
-  return v           
+
+  return v
 end
 
 local controlnames = {
@@ -38,8 +38,8 @@ end
 
 return function(format, method, ...)
   local fmt = iorequire(format)
-  
+
   assert(fmt[method], "No support for method '"..tostring(method).."' in IO module '"..format.."'")
-  
+
   return fmt[method](...)
 end

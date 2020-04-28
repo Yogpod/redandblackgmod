@@ -18,7 +18,7 @@ function Table:readbits(bits, data)
   local t = {}
   Node.readbits(self, bits, t)
   return t
-end 
+end
 
 -- We inherit write() and writebits() from Node unmodified -
 -- our parent takes care of passing the right context in.

@@ -210,14 +210,14 @@ function co.cox(...)
 	local err = t[tc]
 	t[tc]=nil
 	t[tc-1]=nil
-	
+
 	assert(isfunction(func),"invalid parameter supplied")
-	
+
 	local thread = coroutine.create(function(unpack(t))
 		xpcall(func,err,...)
 	end)
 	co._re(thread,...)
-	
+
 	return thread
 end
 --]]
@@ -540,15 +540,15 @@ local isevil  = true
 co(function()
 	local cb = co.newcb()
 	local r = co.running()
-	
+
 	local good = isevil and evil or good
-	
+
 	local ret = co.extern_waitcb(function(cb)
 		good(cb)
 	end)
-	
+
 	co.ret("return value to callback")
-	
+
 	print("runcb returned",ret)
 	print"end coro"
 end)
@@ -559,24 +559,24 @@ end)
 --[[
 
 co.wrap(function()
-	
+
 	local w = co.extern(function(...) return ... end,"extern")
-	
+
 	assert(w=="extern")
-	
+
 	local ct = os.clock()
 	co.waittick()
 	assert(ct~=os.clock())
 
-	
+
 	local ct = os.clock()
 	co.sleep(0.2)
 	assert(ct~=os.clock())
-	
+
 	local ok,dat,a,b,c,d = co.fetch("http://iriz.uk.to/404")
 
 	assert(isstring(dat))
-	
+
 end)()
 
 --]]--

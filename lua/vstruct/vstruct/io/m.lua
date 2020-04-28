@@ -8,14 +8,14 @@ local m = {}
 function m.read(_, buf, size)
   local mask = {}
   local e = io("endianness", "get")
-  
+
   local sof,eof,step
   if e == "big" then
     sof,eof,step = #buf,1,-1
   else
     sof,eof,step = 1,#buf,1
   end
-  
+
   for i=sof,eof,step do
     local byte = buf:byte(i)
     for i=1,8 do
@@ -23,7 +23,7 @@ function m.read(_, buf, size)
       byte = math.floor(byte/2)
     end
   end
-  
+
   return mask
 end
 
@@ -41,7 +41,7 @@ end
 function m.write(fd, data, size)
   local buf = ""
   local e = io("endianness", "get")
-  
+
   for i=1,size*8,8 do
     local bits = { unpack(data, i, i+7) }
     local byte = string.char(struct.implode(bits, 8))

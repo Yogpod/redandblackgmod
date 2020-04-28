@@ -14,14 +14,14 @@ end
 function z.write(_, data, size, csize)
   csize = csize or 1
   size = size or #data+csize
-  
+
   assert(size % csize == 0, "string length is not a multiple of character size")
-  
+
   -- truncate to field size
   if #data >= size then
     data = data:sub(1, size-csize)
   end
-  
+
   return io("s", "write", _, data..("\0"):rep(csize), size)
 end
 
@@ -32,22 +32,22 @@ end
 function z.read(fd, buf, size, csize)
   csize = csize or 1
   nul = ("\0"):rep(csize)
-  
+
   -- read exactly that many characters, then strip the null termination
   if size then
     local buf = io("s", "read", fd, buf, size)
     local len = 0
-    
+
     -- search the string for the null terminator. If charsize > 1, just
     -- finding nul isn't good enough - it needs to be aligned on a character
     -- boundary.
     repeat
       len = buf:find(nul, len+1, true)
     until len == nil or (len-1) % csize == 0
-    
+
     return buf:sub(1,(len or 0)-1)
   end
-  
+
   -- this is where it gets ugly: the size wasn't specified, so we need to
   -- read (csize) bytes at a time looking for the null terminator
   local chars = {}

@@ -31,13 +31,13 @@ function e.probe()
   -- if we're running in luajit, we can just query the FFI library
   if jit then
     bigendian = require("ffi").abi("be")
-    
+
   -- if we're not, we dump an empty function and see if the first byte is nul
   -- or not. HACK HACK HACK - this is unlikely to work in anything but the
   -- reference implementation.
   elseif string.dump then
     bigendian = string.byte(string.dump(function() end), 7) == 0x00
-    
+
   -- if neither jit nor string.dump is available, we guess wildly that it's
   -- a little-endian system (and emit a warning)
   else

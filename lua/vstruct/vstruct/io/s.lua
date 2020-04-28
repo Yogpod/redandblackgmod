@@ -12,7 +12,7 @@ function s.read(fd, buf, size)
     assert(#buf == size, "sanity failure: length of buffer does not match length of string format")
     return buf
   end
-  
+
   return fd:read('*a')
 end
 

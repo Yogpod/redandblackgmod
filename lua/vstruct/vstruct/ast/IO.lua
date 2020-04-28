@@ -7,7 +7,7 @@ local function str2args(args)
   local argv = { n = 0 }
   if args then
     local args = args..","
-    
+
     for arg in args:gmatch("([^,]*),") do
       if #arg == 0 then arg = nil
       elseif tonumber(arg) then arg = tonumber(arg)
@@ -26,7 +26,7 @@ function IO:__init(name, args)
   self.size = io(name, "size", unpack(self.argv, 1, self.argv.n))
   self.hasvalue = io(name, "hasvalue", unpack(self.argv, 1, self.argv.n))
 end
-  
+
 function IO:read(fd, data)
   local buf
 

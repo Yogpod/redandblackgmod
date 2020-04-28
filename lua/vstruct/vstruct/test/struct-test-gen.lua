@@ -8,7 +8,7 @@ local CONF = {
   MAX_DEPTH = 5,     -- Limit on nesting depth of test formats.
   COMPOUND_LENGTH = 2,   -- # formats in a sequence.
   SEED = false,    -- Seed for generating tests.
-  
+
   NROF_TESTS = 2^10,  -- number of random test cases to run
 }
 
@@ -176,7 +176,7 @@ end
 -- List module
 local list
 list = {
-  reverse = 
+  reverse =
     function (t)
       local out = {}
       local n = #t
@@ -391,7 +391,7 @@ local function perform_write_test(test, endian)
   if PREFIX_ENDIAN then
     format = "=" .. PREFIX_ENDIAN_SEP .. format
   end
-  
+
   local pcall = pcall
   if not PROTECT_STRUCT then
     pcall = function (f,...) return true, f(...) end
@@ -427,7 +427,7 @@ local function perform_read_test(test, endian)
   if PREFIX_ENDIAN then
     format = "=" .. PREFIX_ENDIAN_SEP .. format
   end
-   
+
   local pcall = pcall
   if not PROTECT_STRUCT then
     pcall = function (f,...) return true, f(...) end

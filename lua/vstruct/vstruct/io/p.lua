@@ -10,7 +10,7 @@ function p.size(size, frac)
   assert(tonumber(size), "format requires a size")
   assert(tonumber(frac), "format requires a fractional-part size")
   assert(size*8 >= frac, "fixed point number has more fractional bits than total bits")
-  
+
   return size
 end
 

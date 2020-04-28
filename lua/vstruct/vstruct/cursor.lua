@@ -13,7 +13,7 @@ local cursor = {}
 function cursor:seek(whence, offset)
   whence = whence or "cur"
   offset = offset or 0
-  
+
   if whence == "set" then
     self.pos = offset
   elseif whence == "cur" then
@@ -23,12 +23,12 @@ function cursor:seek(whence, offset)
   else
     error "bad argument #1 to seek"
   end
-  
+
   if self.pos < 0 then
     self.pos = 0
     return nil,"attempt to seek prior to start of file"
   end
-  
+
   return self.pos
 end
 
@@ -39,14 +39,14 @@ function cursor:read(n)
   if self.pos >= #self.str then
     return nil,"eof"
   end
-  
+
   if n == "*a" then
     n = #self.str
   end
-  
+
   local buf = self.str:sub(self.pos+1, self.pos + n)
   self.pos = math.min(self.pos + n, #self.str)
-  
+
   return buf
 end
 
@@ -65,7 +65,7 @@ function cursor:write(buf)
   self.pos = self.pos + #buf
 
   return self
-end 
+end
 
 cursor.__index = cursor
 
