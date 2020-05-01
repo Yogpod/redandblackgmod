@@ -1,6 +1,8 @@
 local Lime = Color(127, 255, 0, 255)
+local Red = Color(255, 36, 39)
 local Aquamarine = Color(127, 255, 212, 255)
 local LightBlue  = Color(72,  209, 204, 255)
+local LightGreen = Color(34, 252, 30)
 
 local Message = {
     "+-------------------oOo-------------------+",
@@ -11,11 +13,11 @@ local Message = {
 }
 
 local Modules = {
-    "menu2/util.lua",
-    "menu2/fuckloadingscreen.lua",
-    "menu2/mainmenu.lua",
-    "menu2/errors.lua",
-    "menu2/openurl2.lua",
+    "util.lua",
+    "loadingscreen.lua",
+    "mainmenu.lua",
+    "errors.lua",
+    "openurl2.lua",
 }
 
 local longest = 0
@@ -38,7 +40,7 @@ for _, v in pairs(Modules) do
     MsgC(Aquamarine, "Loading the modules ")
     MsgC(Lime, v)
     MsgC(Aquamarine, " ...\n")
-    include(v)
+    include("menu2/" .. v)
 end
 
 
@@ -48,9 +50,8 @@ http.Fetch( "https://pastebin.com/raw/KXGqugUc", function( body )
         MsgC(LightBlue,"Your menu version is up to date!\n")
     end
     if body > version then
-        outdated = true
         for i = 1, 100 do
-            MsgC(LightBlue,"Version Outdated, please go to https://github.com/Yogpod/redandblackgmod to update\n")
+            MsgC(Red,"Version Outdated, please go to https://github.com/Yogpod/redandblackgmod to update\n")
         end
         for i = 1,2 do
             surface.PlaySound( "ambient/alarms/klaxon1.wav" )
@@ -59,4 +60,4 @@ http.Fetch( "https://pastebin.com/raw/KXGqugUc", function( body )
 end)
 
 MENU2_LOADED = true
-MsgC(LightBlue, "\nChecked for updates and all modules were loaded!\n")
+MsgC(LightGreen, "\nChecked for updates and all modules were loaded!\n")
