@@ -1,13 +1,42 @@
+local PANEL_Browser = {}
+
+PANEL_Browser.Base = "DFrame"
+
+function PANEL_Browser:Init()
+    self.HTML = vgui.Create( "HTML", self )
+
+    if ( !self.HTML ) then
+        print( "SteamOverlayReplace: Failed to create HTML element" )
+        self:Remove()
+        return
+    end
+
+    self.HTML:Dock( FILL )
+    self.HTML:SetOpenLinksExternally( true )
+
+    self:SetTitle( "Steam overlay replacement" )
+    self:SetSize( ScrW() * 0.75, ScrH() * 0.75 )
+    self:SetSizable( true )
+    self:Center()
+    self:MakePopup()
+end
+
+function PANEL_Browser:SetURL( url )
+    self.HTML:OpenURL( url )
+end
+
+----------------------------------------------
+
 local PANEL = {}
 local PanelInst = nil
 
 PANEL.Base = "DFrame"
 
 function PANEL:Init()
-    self:SetTitle( "Do you want to open this website ?" )
+    self:SetTitle( "#openurl.title" )
 
     self.Garble = vgui.Create( "DLabel", self )
-    self.Garble:SetText( "" )
+    self.Garble:SetText( "#openurl.text" )
     self.Garble:SetContentAlignment( 5 )
     self.Garble:Dock( TOP )
 
@@ -19,12 +48,12 @@ function PANEL:Init()
     self.Buttons:Dock( BOTTOM )
 
     self.Nope = vgui.Create( "DButton", self.Buttons )
-    self.Nope:SetText( "No" )
+    self.Nope:SetText( "#openurl.nope" )
     self.Nope.DoClick = function() self:DoNope() end
     self.Nope:Dock( RIGHT )
 
     self.Yes = vgui.Create( "DButton", self.Buttons )
-    self.Yes:SetText( "Yes" )
+    self.Yes:SetText( "#openurl.yes" )
     self.Yes.DoClick = function() self:DoYes() end
     self.Yes:DockMargin( 0, 0, 8, 0 )
     self.Yes:Dock( RIGHT )
@@ -67,6 +96,7 @@ function PANEL:DoYes()
     gui.HideGameUI()
 end
 
+-- Called from the engine
 function RequestOpenURL( url )
     if IsValid( PanelInst ) then
         PanelInst:Remove()
@@ -74,5 +104,20 @@ function RequestOpenURL( url )
 
     PanelInst = vgui.CreateFromTable( PANEL )
     PanelInst:SetURL( url )
-    gui.ActivateGameUI()
+
+    timer.Simple( 0, function()
+        gui.ActivateGameUI()
+    end )
+end
+
+
+function GMOD_OpenURLNoOverlay( url )
+
+    local BrowserInst = vgui.CreateFromTable( PANEL_Browser )
+    BrowserInst:SetURL( url )
+
+    timer.Simple( 0, function()
+        gui.ActivateGameUI()
+    end )
+
 end
