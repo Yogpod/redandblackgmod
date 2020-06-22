@@ -21,6 +21,11 @@ function ControllerServers( $scope, $element, $rootScope, $location )
 		lua.Run( "DoStopServers( '" + Scope.ServerType + "' )" );
 	}
 
+		$scope.$on( "$destroy", function()
+	{
+		$scope.DoStopRefresh();
+	} );
+
 	$scope.Refresh = function()
 	{
 		if ( !Scope.ServerType ) return;
@@ -49,7 +54,7 @@ function ControllerServers( $scope, $element, $rootScope, $location )
 	{
 		if ( event && event.which != 1 )
 		{
-			lua.Run( "SetClipboardText( '" + server.name.replace( "'", "\\'") + " @ " + server.address + " - " + server.steamID + " (Anon:" + server.isAnon + ")' )" );
+			lua.Run( "SetClipboardText( '" + server.address + " - " + server.steamID + " (Anon:" + server.isAnon + ")' )" );
 			event.preventDefault();
 			return;
 		}
@@ -243,7 +248,7 @@ function AddServer( type, id, ping, name, desc, map, players, maxplayers, botpla
 		desc:			desc,
 		map:			map,
 		players:		parseInt( players ) - parseInt( botplayers ),
-		maxplayers:		parseInt( maxplayers ),
+		maxplayers:		parseInt( maxplayers ) - parseInt( botplayers ),
 		botplayers:		parseInt( botplayers ),
 		pass:			pass,
 		lastplayed:		parseInt( lastplayed ),
@@ -311,7 +316,7 @@ function MissingGamemodeIcon( element )
 
 function SetPlayerList( serverip, players )
 {
-	if ( !Scope.CurrentGamemode.Selected ) return;
+	if ( !Scope.CurrentGamemode || !Scope.CurrentGamemode.Selected ) return;
 	if ( Scope.CurrentGamemode.Selected.address != serverip ) return;
 
 	Scope.CurrentGamemode.Selected.playerlist = players
