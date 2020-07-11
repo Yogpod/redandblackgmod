@@ -44,7 +44,7 @@ for _, v in pairs(Modules) do
 end
 
 
-local version = "16"
+local version = "17"
 http.Fetch( "https://pastebin.com/raw/KXGqugUc", function( body )
     if body == version then
         MsgC(LightBlue,"Your menu version is up to date!\n")

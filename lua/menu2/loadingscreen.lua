@@ -3,8 +3,8 @@ g_MapName		= ""
 g_ServerURL		= ""
 g_MaxPlayers	= ""
 g_SteamID		= ""
-
-CreateClientConVar("cl_loadingurl", "https://propkill.me", true, true, "Set your own Loading screen. (URL or Path to file)")
+--remove indexx.html part if you want new website w/music
+CreateClientConVar("cl_loadingurl", "https://propkill.me/indexx.html", true, true, "Set your own Loading screen. (URL or Path to file)")
 
 local PANEL = {}
 
