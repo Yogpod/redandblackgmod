@@ -39,7 +39,7 @@ UL.category LI.mapicon
 	position: relative;
 	width: 128px;
 	text-align: center;
-	font-size: 12px;
+	font-size: 10px;
 	padding: 6px;
 	margin: 2px;
 	cursor: pointer;
@@ -154,7 +154,7 @@ gamesettings select
 	border: 1px solid #222;
 	display: none;
 	cursor: pointer;
-	font-size: 12px;
+	font-size: 13px;
 	-webkit-box-shadow: 2px 2px 8px rgba( 0, 0, 0, 0.5 );
 	color: #DDD;
 }
@@ -166,7 +166,7 @@ gamesettings select
 
 .dropdown .contents div:hover
 {
-	background-color: #666;
+	background-color:#666;
 }
 
 .caret
@@ -190,8 +190,18 @@ gamesettings .control
 
 gamesettings .control LABEL
 {
-	font-size: 12px;
+	font-size: 11px;
 	color: #888;
+}
+
+gamesettings .control:not(.control-numeric) LABEL
+{
+	position: relative;
+	top: -2px;
+}
+gamesettings .control-numeric LABEL
+{
+	line-height: 20px;
 }
 
 gamesettings .control input[type=text]

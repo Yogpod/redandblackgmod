@@ -1,4 +1,4 @@
-
+﻿
 include( "background.lua" )
 include( "cef_credits.lua" )
 include( "openurl.lua" )
@@ -78,19 +78,17 @@ function PANEL:Paint()
 		end
 	end
 
-	if ( self.CanAddServerToFavorites != CanAddServerToFavorites() ) then
+	if ( !self.IsInGame ) then return end
 
-		self.CanAddServerToFavorites = CanAddServerToFavorites()
+	local canAdd = CanAddServerToFavorites()
+	local isFav = serverlist.IsCurrentServerFavorite()
+	if ( self.CanAddServerToFavorites != canAdd || self.IsCurrentServerFavorite != isFav ) then
 
-		if ( self.CanAddServerToFavorites ) then
+		self.CanAddServerToFavorites = canAdd
+		self.IsCurrentServerFavorite = isFav
 
-			self.HTML:QueueJavascript( "SetShowFavButton( true )" )
+		self.HTML:QueueJavascript( "SetShowFavButton( " .. tostring( self.CanAddServerToFavorites ) ..", " .. tostring( self.IsCurrentServerFavorite ) .. " )" )
 
-		else
-
-			self.HTML:QueueJavascript( "SetShowFavButton( false )" )
-
-		end
 	end
 
 end
@@ -252,9 +250,12 @@ end )
 
 function LoadNewsList()
 	if ( !pnlMainMenu ) then return end
+
+	local json = util.TableToJSON( NewsList )
+	pnlMainMenu:Call( "UpdateNewsList(" .. json .. ", " .. cookie.GetString( "hide_newslist", "false" ) .. " )" )
 	local nl = {{
 		Date = "4/27/2020",
-		HeaderImage = "https://propkill.me/pls/4aztsK.png",
+		HeaderImage = "http://pls.propkill.me/h1qB.png",
 		ShortName = "RNBGmod",
 		SummaryHtml = "Welcome",
 		Title = "Red&Black Garry's Mod",
@@ -262,6 +263,10 @@ function LoadNewsList()
 	}}
 	local json = util.TableToJSON( nl )
 	pnlMainMenu:Call( "UpdateNewsList(" .. json .. ")" )
+end
+
+function SaveHideNews( bHide )
+	cookie.Set( "hide_newslist", tostring( bHide ) )
 end
 
 local function IsServerBlacklisted( address, hostname, description, gm, map )
@@ -316,7 +321,7 @@ function GetServers( category, id )
 	local data = {
 		Callback = function( ping, name, desc, map, players, maxplayers, botplayers, pass, lastplayed, address, gm, workshopid, isAnon, steamID64 )
 
-			if Servers[ category ] && Servers[ category ][ address ] then print( "Server Browser Error!", address, category ) return end
+			if ( Servers[ category ] && Servers[ category ][ address ] ) then print( "Server Browser Error!", address, category ) return end
 			Servers[ category ][ address ] = true
 
 			local blackListMatch = IsServerBlacklisted( address, name, desc, gm, map )
@@ -329,14 +334,26 @@ function GetServers( category, id )
 				gm = string.JavascriptSafe( gm )
 				workshopid = string.JavascriptSafe( workshopid )
 
-				pnlMainMenu:Call( string.format( 'AddServer( "%s", "%s", %i, "%s", "%s", "%s", %i, %i, %i, %s, %i, "%s", "%s", "%s", %s, "%s" );',
-					category, id, ping, name, desc, map, players, maxplayers, botplayers, tostring( pass ), lastplayed, address, gm, workshopid, tostring( isAnon ), steamID64 ) )
+				pnlMainMenu:Call( string.format( 'AddServer( "%s", "%s", %i, "%s", "%s", "%s", %i, %i, %i, %s, %i, "%s", "%s", "%s", %s, "%s", "%s" );',
+					category, id, ping, name, desc, map, players, maxplayers, botplayers, tostring( pass ), lastplayed, address, gm, workshopid, tostring( isAnon ), steamID64, tostring( serverlist.IsServerFavorite( address ) ) ) )
 
 			else
 
 				Msg( "Ignoring server '", name, "' @ ", address, " - ", blackListMatch, " is blacklisted\n" )
 
 			end
+
+			return !ShouldStop[ category ]
+
+		end,
+
+		CallbackFailed = function( address )
+
+			if ( Servers[ category ] && Servers[ category ][ address ] ) then print( "Server Browser Error!", address, category ) return end
+			Servers[ category ][ address ] = true
+
+			pnlMainMenu:Call( string.format( 'AddServer( "%s", "%s", %i, "%s", "%s", "%s", %i, %i, %i, %s, %i, "%s", "%s", "%s", %s, "%s", "%s" );',
+					category, id, 9999, "The server at address " .. address .. " failed to respond", "Unreachable Servers", "no_map", 0, 2, 0, 'false', 0, address, 'unkn', '0', 'true', '', tostring( serverlist.IsServerFavorite( address ) ) ) )
 
 			return !ShouldStop[ category ]
 
@@ -409,6 +426,38 @@ end
 function UpdateAddonDisabledState()
 	local noaddons, noworkshop = GetAddonStatus()
 	pnlMainMenu:Call( "UpdateAddonDisabledState( " .. tostring( noaddons ) .. ", " .. tostring( noworkshop ) .. " )" )
+end
+
+function MenuGetAddonData( wsid )
+	steamworks.FileInfo( wsid, function( data )
+		local json = util.TableToJSON( data ) or ""
+		pnlMainMenu:Call( "ReceivedChildAddonInfo( " .. json .. " )" )
+	end )
+end
+
+local presetCache = {}
+function CreateNewAddonPreset( data )
+	if ( table.IsEmpty( presetCache ) ) then presetCache = util.JSONToTable( LoadAddonPresets() or "" ) or {} end
+
+	local data = util.JSONToTable( data )
+	presetCache[ data.name ] = data
+
+	SaveAddonPresets( util.TableToJSON( presetCache ) )
+end
+function DeleteAddonPreset( name )
+	if ( table.IsEmpty( presetCache ) ) then presetCache = util.JSONToTable( LoadAddonPresets() or "" ) or {} end
+
+	presetCache[ name ] = {}
+	presetCache[ name ] = nil
+
+	SaveAddonPresets( util.TableToJSON( presetCache ) )
+
+	ListAddonPresets()
+end
+function ListAddonPresets()
+	if ( table.IsEmpty( presetCache ) ) then presetCache = util.JSONToTable( LoadAddonPresets() or "" ) or {} end
+
+	pnlMainMenu:Call( "OnReceivePresetList(" .. util.TableToJSON( presetCache ) .. ")" )
 end
 
 -- Called when UGC subscription status changes

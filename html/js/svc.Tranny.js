@@ -11,15 +11,11 @@ angular.module( 'tranny', [] )
 		{
 			if ( IN_ENGINE )
 			{
-				var outStr_old = language.Update( strName, function( outStr )
+				language.Update( strName, function( outStr )
 				{
 					$(element).html( outStr );
 					$(element).attr( "placeholder", outStr );
 				} );
-
-				// Compatibility with Awesomium
-				$(element).html( outStr_old );
-				$(element).attr( "placeholder", outStr_old );
 			}
 			else
 			{

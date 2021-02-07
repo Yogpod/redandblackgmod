@@ -27,7 +27,7 @@
 			<h1 class="menuheader">
 				<span ng-Tranny="'servers_gamemodes'"></span>
 				<small ng-Tranny="'servers_gamemodes.subtitle'"></small>
-				<input ng-model="Search.name" class="gm_search searchbox" ng-Tranny="'searchbar_placeholder'" />
+				<input ng-model="GMSearch" class="gm_search searchbox" ng-Tranny="'searchbar_placeholder'" />
 			</h1>
 
 			<div class='server_gamemodes whiterounded scrollable'>
@@ -78,7 +78,7 @@
 					<div ng-repeat="server in CurrentGamemode.servers|filter:CurrentGamemode.Search|orderBy:CurrentGamemode.OrderBy:CurrentGamemode.OrderReverse|limitTo:256"
 						class="server {{ServerClass(server)}} {{IfElse( CurrentGamemode.Selected == server, 'activeserver', '' )}}" ng-mouseup="SelectServer( server, $event )" >
 						<name>
-							<a class='unfavbutton {{IfElse( !server.favorite, "removed", "" )}}' ng-show="ServerType == 'favorite'" ng-click="ToggleFavorite( server );$event.stopPropagation();"></a>
+							<a class='favbutton {{IfElse( server.favorite, "favorited", "" )}}' ng-click="ToggleFavorite( server );$event.stopPropagation();"></a>
 							<img src='img/server-passworded.png' style="margin-right: 8px;" ng-show="server.pass"/>
 							<span>{{server.name}}</span>
 						</name>
@@ -128,6 +128,7 @@
 								ng-click="JoinServer( CurrentGamemode.Selected )"
 								ng-tranny="CurrentGamemode.Selected.players < CurrentGamemode.Selected.maxplayers && 'servers_join_server' || 'servers_join_server_full'">
 							</button>
+
 						</div>
 					</footer>
 
