@@ -13,6 +13,6 @@ have to either sit through that or
 watch some little thing spin for 20 minutes.
 
 ### Installation
-https://propkill.me/pls/fc8kme.mp4
+figure it out
 
 Enjoy
