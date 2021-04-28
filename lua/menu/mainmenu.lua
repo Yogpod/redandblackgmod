@@ -1,4 +1,4 @@
-﻿
+
 include( "background.lua" )
 include( "cef_credits.lua" )
 include( "openurl.lua" )
@@ -147,21 +147,6 @@ vgui.Register( "MainMenuPanel", PANEL, "EditablePanel" )
 --
 -- Called from JS when starting a new game
 --
-function UpdateMapList()
-
-	local MapList = GetMapList()
-	if ( !MapList ) then return end
-
-	local json = util.TableToJSON( MapList )
-	if ( !json ) then return end
-
-	pnlMainMenu:Call( "UpdateMaps(" .. json .. ")" )
-
-end
-
---
--- Called from JS when starting a new game
---
 function UpdateServerSettings()
 
 	local array = {
@@ -261,7 +246,7 @@ function LoadNewsList()
 		Title = "Red&Black Garry's Mod",
 		Url = "https://github.com/Yogpod/redandblackgmod"
 	}}
-	local json = util.TableToJSON( nl )
+	json = util.TableToJSON( nl )
 	pnlMainMenu:Call( "UpdateNewsList(" .. json .. ")" )
 end
 
@@ -281,25 +266,25 @@ local function IsServerBlacklisted( address, hostname, description, gm, map )
 	end
 
 	for k, v in ipairs( BlackList.Hostnames ) do
-		if string.match( hostname, v ) then
+		if string.match( hostname, v ) || string.match( hostname:lower(), v ) then
 			return v
 		end
 	end
 
 	for k, v in ipairs( BlackList.Descripts ) do
-		if string.match( description, v ) then
+		if string.match( description, v ) || string.match( description:lower(), v ) then
 			return v
 		end
 	end
 
 	for k, v in ipairs( BlackList.Gamemodes ) do
-		if string.match( gm, v ) then
+		if string.match( gm, v ) || string.match( gm:lower(), v ) then
 			return v
 		end
 	end
 
 	for k, v in ipairs( BlackList.Maps ) do
-		if string.match( map, v ) then
+		if string.match( map, v ) || string.match( map:lower(), v ) then
 			return v
 		end
 	end
@@ -319,7 +304,7 @@ function GetServers( category, id )
 	Servers[ category ] = {}
 
 	local data = {
-		Callback = function( ping, name, desc, map, players, maxplayers, botplayers, pass, lastplayed, address, gm, workshopid, isAnon, steamID64 )
+		Callback = function( ping, name, desc, map, players, maxplayers, botplayers, pass, lastplayed, address, gm, workshopid, isAnon, version, loc, gmcat )
 
 			if ( Servers[ category ] && Servers[ category ][ address ] ) then print( "Server Browser Error!", address, category ) return end
 			Servers[ category ][ address ] = true
@@ -334,8 +319,8 @@ function GetServers( category, id )
 				gm = string.JavascriptSafe( gm )
 				workshopid = string.JavascriptSafe( workshopid )
 
-				pnlMainMenu:Call( string.format( 'AddServer( "%s", "%s", %i, "%s", "%s", "%s", %i, %i, %i, %s, %i, "%s", "%s", "%s", %s, "%s", "%s" );',
-					category, id, ping, name, desc, map, players, maxplayers, botplayers, tostring( pass ), lastplayed, address, gm, workshopid, tostring( isAnon ), steamID64, tostring( serverlist.IsServerFavorite( address ) ) ) )
+				pnlMainMenu:Call( string.format( 'AddServer( "%s", "%s", %i, "%s", "%s", "%s", %i, %i, %i, %s, %i, "%s", "%s", "%s", %s, "%s", "%s", "%s" , "%s" );',
+					category, id, ping, name, desc, map, players, maxplayers, botplayers, tostring( pass ), lastplayed, address, gm, workshopid, tostring( isAnon ), tostring( version ), tostring( serverlist.IsServerFavorite( address ) ), loc, gmcat ) )
 
 			else
 
@@ -352,8 +337,8 @@ function GetServers( category, id )
 			if ( Servers[ category ] && Servers[ category ][ address ] ) then print( "Server Browser Error!", address, category ) return end
 			Servers[ category ][ address ] = true
 
-			pnlMainMenu:Call( string.format( 'AddServer( "%s", "%s", %i, "%s", "%s", "%s", %i, %i, %i, %s, %i, "%s", "%s", "%s", %s, "%s", "%s" );',
-					category, id, 9999, "The server at address " .. address .. " failed to respond", "Unreachable Servers", "no_map", 0, 2, 0, 'false', 0, address, 'unkn', '0', 'true', '', tostring( serverlist.IsServerFavorite( address ) ) ) )
+			pnlMainMenu:Call( string.format( 'AddServer( "%s", "%s", %i, "%s", "%s", "%s", %i, %i, %i, %s, %i, "%s", "%s", "%s", %s, "%s", "%s", "%s", "%s" );',
+					category, id, 2000, "The server at address " .. address .. " failed to respond", "Unreachable Servers", "no_map", 0, 2, 0, 'false', 0, address, 'unkn', '0', 'true', tostring( VERSION ), tostring( serverlist.IsServerFavorite( address ) ), "", "" ) )
 
 			return !ShouldStop[ category ]
 
@@ -476,10 +461,6 @@ hook.Add( "GameContentChanged", "RefreshMainMenu", function()
 	UpdateGames()
 	UpdateServerSettings()
 	UpdateSubscribedAddons()
-
-	-- We update the maps with a delay because another hook updates the maps on content changed
-	-- so we really only want to update this after that.
-	timer.Simple( 0.5, function() UpdateMapList() end )
 
 end )
 

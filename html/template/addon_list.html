@@ -51,7 +51,7 @@
 
 		<workshopcontainer>
 			<workshopmessage ng-show="Loading" ng-Tranny="'addons.loading'">...</workshopmessage>
-			<workshopmessage ng-show="TotalResults == 0 && !Loading && ( !Disabled || Category != 'subscribed' )" ng-Tranny="'addons.none'">...</workshopmessage>
+			<workshopmessage ng-show="( TotalResults == 0 || NumResults == 0 ) && !Loading && ( !Disabled || Category != 'subscribed' )" ng-Tranny="'addons.none'">...</workshopmessage>
 			<workshopmessage ng-show="TotalResults == 0 && !Loading && Disabled && Category == 'subscribed'" ng-Tranny="'addons.disabled'">...</workshopmessage>
 
 			<workshopicon ng-hide="Loading" ng-repeat="file in Files" style="width: {{IconWidth|number:0}}px; height: {{IconHeight|number:0}}px" class="{{GetAddonClasses( file )}}">
@@ -60,13 +60,15 @@
 					<img src='../{{file.background || "img/downloading.png"}}' style="width: {{IconMax|number:0}}px; height: {{IconMax|number:0}}px;"/>
 				</preview>
 
-				<name ng-click="OpenWorkshopFile( file.id )">{{file.extra.title || file.info.title || "Loading..."}}</name>
+				<name class="{{IfElse( Category == 'subscribed', 'subscription', '' )}}">
+					<label ng-click="OpenWorkshopFile( file.id )">{{file.extra.title || file.info.title || "Loading..."}}</label>
+				</name>
 				<author ng-hide="file.local">{{file.info.ownername || "Loading..."}}</author>
 				<size ng-hide="!file.info.size">{{GetNiceSize( file.info.size )}}</size>
 				<votes ng-show="!file.local && (file.info.up-file.info.down) > 0" >+{{file.info.up-file.info.down|number:0}}</votes>
 				<votes ng-show="!file.local && (file.info.up-file.info.down) < 0" class="negative">{{file.info.up-file.info.down|number:0}}</votes>
 				<description>{{GetAddonDescription( file )}}</description>
-				<input type="checkbox" class="checkbox" ng-show="Category == 'subscribed'" ng-model="SelectedItems[ file.id ]" <!--ng-click="$event.stopPropagation()"-->>
+				<input type="checkbox" class="checkbox" ng-show="Category == 'subscribed'" ng-model="SelectedItems[ file.id ]" />
 
 				<controls ng-show="!file.info.floating">
 					<left>
@@ -107,8 +109,8 @@
 		<div ng-show="Category == 'subscribed'" class="ugc_settings {{IfElse(UGCSettingsOpen, 'active', 'hidden')}}">
 			<div class="ugc_settings_cat">
 				<span ng-Tranny="'addons.filter_by'"></span>
-				<input type="checkbox" ng-model="FilerEnabledOnly" ng-change="HandleFilterChange( 1 )"/><label ng-Tranny="'addons.enabled_only'"></label><br>
-				<input type="checkbox" ng-model="FilerDisabledOnly" ng-change="HandleFilterChange( 0 )"/><label ng-Tranny="'addons.disabled_only'"></label>
+				<input type="checkbox" ng-model="FilterEnabledOnly" ng-change="HandleFilterChange( 1 )"/><label ng-Tranny="'addons.enabled_only'"></label><br>
+				<input type="checkbox" ng-model="FilterDisabledOnly" ng-change="HandleFilterChange( 0 )"/><label ng-Tranny="'addons.disabled_only'"></label>
 			</div>
 			<div class="ugc_settings_cat">
 				<span ng-Tranny="'addons.sort_by'"></span>

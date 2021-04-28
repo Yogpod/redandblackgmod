@@ -16,6 +16,8 @@ function MenuController( $scope, $rootScope )
 {
 	$rootScope.ShowBack = false;
 	$scope.Version = "0";
+	$scope.ProblemCount = 0;
+	$scope.ProblemSevere = false;
 
 	subscriptions.Init( $scope );
 
@@ -51,7 +53,7 @@ function MenuController( $scope, $rootScope )
 	{
 		$scope.Gamemode = gm.name;
 		$scope.GamemodeTitle = gm.title;
-		lua.Run( "RunConsoleCommand( \"gamemode\", \"" + gm.name + "\" )" );
+		lua.Run( "RunConsoleCommand( \"gamemode\", %s )", gm.name );
 
 		$( '.gamemode_list' ).hide();
 	}
@@ -59,14 +61,14 @@ function MenuController( $scope, $rootScope )
 	$scope.SelectLanguage = function( lang )
 	{
 		$rootScope.Language = lang;
-		lua.Run( "RunConsoleCommand( \"gmod_language\", \"" + lang + "\" )" );
+		lua.Run( "RunConsoleCommand( \"gmod_language\", %s )", lang );
 
 		$( '.language_list' ).hide();
 	}
 
 	$scope.MenuOption = function( btn, v )
 	{
-		lua.Run( "RunGameUICommand( '" + v + "' )" )
+		lua.Run( "RunGameUICommand( %s )", v );
 	}
 
 	$scope.IfElse = function( b, a, c )
@@ -93,7 +95,8 @@ function MenuController( $scope, $rootScope )
 	//
 	$scope.GameMountChanged = function( mount )
 	{
-		lua.Run( "engine.SetMounted( " + mount.depot + ", " + mount.mounted + " )" );
+		var bMount = mount.mounted ? "true" : "false";
+		lua.Run( "engine.SetMounted( %s, " + bMount + " )", String( mount.depot ) );
 	}
 
 	//
@@ -106,6 +109,7 @@ function MenuController( $scope, $rootScope )
 
 	$scope.ToggleServerFavorites = function( bAdd )
 	{
+		var bAdd = bAdd ? "true" : "false";
 		lua.Run( "serverlist.AddCurrentServerToFavorites( " + bAdd + " )" );
 	}
 
@@ -133,9 +137,14 @@ function MenuController( $scope, $rootScope )
 
 	$scope.ShowNews = function()
 	{
-		if ( gScope.Branch != "unknown" ) return lua.Run( "gui.OpenURL( 'https://commits.facepunch.com/r/garrysmod' )" );
+		if ( gScope.Branch != "unknown" ) return lua.Run( "gui.OpenURL( 'https://commits.facepunch.com/r/Garrys%20Mod' )" );
 
 		lua.Run( "gui.OpenURL( 'http://gmod.facepunch.com/changes/' )" );
+	}
+
+	$scope.ToggleProblems = function()
+	{
+		lua.Run( "OpenProblemsPanel()" );
 	}
 
 	// InGame
@@ -299,8 +308,18 @@ function UpdateGames( games )
 
 function UpdateVersion( version, branch )
 {
+	GMOD_VERSION_INT = parseInt( version.replace( /\./g, "" ).substr( 2 ) ); // For server browser
+
 	gScope.Version	= version;
 	gScope.Branch	= branch;
+
+	UpdateDigest( gScope, 100 );
+}
+
+function SetProblemCount( num, bSevere )
+{
+	gScope.ProblemCount		= num;
+	gScope.ProblemSevere	= bSevere;
 
 	UpdateDigest( gScope, 100 );
 }
