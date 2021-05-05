@@ -39,10 +39,10 @@
 				if ( today.getMonth() == 10 && today.getDate() >= 15 || today.getMonth() == 11 && today.getDate() <= 5 ) isHalloween = true;
 
 				// Force it to dark on Spooktober or when it's late
-				if ( isHalloween || ( today.getHours() >= 19 || today.getHours() <= 7 ) )
-				{
+				//if ( isHalloween || ( today.getHours() >= 19 || today.getHours() <= 7 ) )
+				//{
 					$("body").addClass( "dark" );
-				}
+				//}
 			}
 
 			function GameDetails( servername, serverurl, mapname, maxplayers, steamid, gamemode, volume, lang, gamemodeNice )

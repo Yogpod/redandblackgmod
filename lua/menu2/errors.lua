@@ -3,11 +3,9 @@
 --
 -- This should help `newbs` find out which addons are crashing.
 --
-
 local Errors = {}
 
-hook.Add( "OnLuaError", "MenuErrorHandler", function( str, realm, stack, addontitle, addonid )
-
+hook.Add("OnLuaError", "MenuErrorHandler", function(str, realm, stack, addontitle, addonid)
     -- This error is caused by a specific workshop addon
     --[[if ( isstring( addonid ) ) then
         -- Down Vote
@@ -19,35 +17,35 @@ hook.Add( "OnLuaError", "MenuErrorHandler", function( str, realm, stack, addonti
             steamworks.ApplyAddons()
         end )
     end]]
+    if (addonid == nil) then
+        addonid = 0
+    end
 
-    if ( addonid == nil ) then addonid = 0 end
-
-    if ( Errors[ addonid ] ) then
-        Errors[ addonid ].times = Errors[ addonid ].times + 1
-        Errors[ addonid ].last  = SysTime()
+    if (Errors[addonid]) then
+        Errors[addonid].times = Errors[addonid].times + 1
+        Errors[addonid].last = SysTime()
 
         return
     end
 
-    local text = language.GetPhrase( "errors.something" )
+    local text = language.GetPhrase("errors.something")
 
     -- We know the name, display it to the user
-    if ( isstring( addontitle ) ) then
-        text = string.format( language.GetPhrase( "errors.addon" ), addontitle .. " " .. addonid )
+    if (isstring(addontitle)) then
+        text = string.format(language.GetPhrase("errors.addon"), addontitle .. " " .. addonid)
     end
 
     local error = {
-        first   = SysTime(),
-        last    = SysTime(),
-        times   = 1,
-        title   = addontitle,
-        x       = 32,
-        text    = text
+        first = SysTime(),
+        last = SysTime(),
+        times = 1,
+        title = addontitle,
+        x = 32,
+        text = text
     }
 
-    Errors[ addonid ] = error
-
-end )
+    Errors[addonid] = error
+end)
 
 local matAlert = Material("icon16/error.png")
 
@@ -82,7 +80,7 @@ hook.Add("DrawOverlay", "MenuDrawLuaErrors", function()
         surface.SetMaterial(matAlert)
         surface.DrawTexturedRect(v.x + 6, v.y + 6, 16, 16)
         surface.SetDrawColor(255, 0, 0, 255)
-        surface.DrawOutlinedRect( v.x, v.y, v.w, height )
+        surface.DrawOutlinedRect(v.x, v.y, v.w, height)
         v.y = idealy
         idealy = idealy + 40
 
