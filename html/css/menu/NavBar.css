@@ -75,7 +75,7 @@
 
 #NavBar .right li:hover, #NavBar .center li:hover
 {
-	background-color: #555;
+	box-shadow: 0px 0px 20px #555;
 }
 
 #NavBar LI, UL.popup LI, #NavBar .button
@@ -108,7 +108,7 @@
 
 #NavBar .button:hover
 {
-	background-color: #555;
+	box-shadow: 0px 0px 20px #555;
 }
 
 #NavBar .button span
