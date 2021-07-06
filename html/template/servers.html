@@ -59,9 +59,9 @@
 
 			<div class='server_gamemodes whiterounded scrollable'>
 
-				<div class='gamemode {{gamemode.element_class}}' ng-repeat="gamemode in GamemodeList | filter: gamemodeFilter | orderBy:[GMSort, '-(num_players)', 'name' ]" ng-click="SelectGamemode( gamemode )">
+				<div class='gamemode {{gamemode.element_class}}' ng-repeat="gamemode in GamemodeList | filter: gamemodeFilter | orderBy:[GMSort, '-(num_players)', 'name' ]" ng-mouseup="SelectGamemode( gamemode, $event )">
 
-					<img src='../gamemodes/{{gamemode.name}}/icon24.png' onerror="MissingGamemodeIcon( this )"/>
+					<img src='../gamemodes/{{gamemode.name}}/icon24.png' onerror="MissingGamemodeIcon( this )" />
 
 					<div class='stats'>{{gamemode.num_players}} <span ng-tranny="gamemode.num_players == 1 && 'servers_player_on' || 'servers_players_on'"></span> {{gamemode.num_servers}} <span ng-tranny="gamemode.num_servers == 1 && 'servers_server' || 'servers_servers'"></span></div>
 					<div class='name'>

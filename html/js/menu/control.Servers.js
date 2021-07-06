@@ -103,8 +103,21 @@ function ControllerServers( $scope, $element, $rootScope, $location )
 		}, 500 )
 	}
 
-	$scope.SelectGamemode = function( gm )
+	$scope.SelectGamemode = function( gm, event )
 	{
+		if ( event && event.which != 1 )
+		{	
+
+			if ( gm && gm.info && gm.info.title ) {
+				lua.Run( "SetClipboardText( %s )", gm.info.title );
+			} else {
+				lua.Run( "SetClipboardText( %s )", "Unknown Gamemode" );
+			}
+
+			event.preventDefault();
+			return
+		}
+
 		Scope.CurrentGamemode = gm;
 	}
 
