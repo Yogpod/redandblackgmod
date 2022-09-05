@@ -12,10 +12,10 @@ function PANEL:Init()
 end
 
 function PANEL:ShowURL(url, force)
-    if (string.len(url) < 5) then return end
+    if string.len(url) < 5 then return end
 
-    if (IsValid(self.HTML)) then
-        if (not force) then return end
+    if IsValid(self.HTML) then
+        if not force then return end
         self.HTML:Remove()
     end
 
@@ -36,15 +36,15 @@ function PANEL:Paint()
     surface.SetDrawColor(30, 30, 30, 255)
     surface.DrawRect(0, 0, self:GetWide(), self:GetTall())
 
-    if (self.JavascriptRun and IsValid(self.HTML) and not self.HTML:IsLoading()) then
+    if self.JavascriptRun and IsValid(self.HTML) and not self.HTML:IsLoading() then
         self:RunJavascript(self.JavascriptRun)
         self.JavascriptRun = nil
     end
 end
 
 function PANEL:RunJavascript(str)
-    if (not IsValid(self.HTML)) then return end
-    if (self.HTML:IsLoading()) then return end
+    if not IsValid(self.HTML) then return end
+    if self.HTML:IsLoading() then return end
     self.HTML:RunJavascript(str)
 end
 
@@ -59,12 +59,15 @@ function PANEL:OnActivate()
 end
 
 function PANEL:OnDeactivate()
-    if (IsValid(self.HTML)) then
+    if IsValid(self.HTML) then
         self.HTML:Remove()
     end
 
     self.LoadedURL = nil
     self.NumDownloadables = 0
+    -- Notify the user that the game is ready.
+    -- TODO: A convar for this?
+    system.FlashWindow()
 end
 
 function PANEL:Think()
@@ -73,20 +76,30 @@ function PANEL:Think()
 end
 
 function PANEL:StatusChanged(strStatus)
-    local startPos, endPos = string.find(strStatus, "Downloading ")
+    -- new FastDL/ServerDL format
+    local matchedFileName = string.match(strStatus, "%w+/%w+ [-] (.+) is downloading")
 
-    if (startPos) then
+    if matchedFileName then
+        self:RunJavascript("if ( window.DownloadingFile ) DownloadingFile( '" .. matchedFileName:JavascriptSafe() .. "' )")
+
+        return
+    end
+
+    -- WorkshopDL and old FastDL
+    local startPos, _ = string.find(strStatus, "Downloading ")
+
+    if startPos then
         -- Snip everything before the Download part
         strStatus = string.sub(strStatus, startPos)
 
         -- Special case needed for workshop, snip the "' via Workshop" part
-        if (string.EndsWith(strStatus, "via Workshop")) then
+        if string.EndsWith(strStatus, "via Workshop") then
             strStatus = string.gsub(strStatus, "' via Workshop", "")
             strStatus = string.gsub(strStatus, "Downloading '", "") -- We need to handle the quote marks
         end
 
-        local Filename = string.gsub(strStatus, "Downloading ", "")
-        self:RunJavascript("if ( window.DownloadingFile ) DownloadingFile( '" .. Filename:JavascriptSafe() .. "' )")
+        local fileName = string.gsub(strStatus, "Downloading ", "")
+        self:RunJavascript("if ( window.DownloadingFile ) DownloadingFile( '" .. fileName:JavascriptSafe() .. "' )")
 
         return
     end
@@ -99,21 +112,21 @@ end
 -----------------------------------------------------------]]
 function PANEL:CheckForStatusChanges()
     local str = GetLoadStatus()
-    if (not str) then return end
+    if not str then return end
     str = string.Trim(str)
     str = string.Trim(str, "\n")
     str = string.Trim(str, "\t")
     str = string.gsub(str, ".bz2", "")
     str = string.gsub(str, ".ztmp", "")
     str = string.gsub(str, "\\", "/")
-    if (self.OldStatus and self.OldStatus == str) then return end
+    if self.OldStatus and self.OldStatus == str then return end
     self.OldStatus = str
     self:StatusChanged(str)
 end
 
 function PANEL:RefreshDownloadables()
     self.Downloadables = GetDownloadables()
-    if (not self.Downloadables) then return end
+    if not self.Downloadables then return end
     local iDownloading = 0
     local iFileCount = 0
 
@@ -125,22 +138,22 @@ function PANEL:RefreshDownloadables()
         iFileCount = iFileCount + 1
     end
 
-    if (iDownloading == 0) then return end
+    if iDownloading == 0 then return end
     self:RunJavascript("if ( window.SetFilesNeeded ) SetFilesNeeded( " .. iDownloading .. ")")
     self:RunJavascript("if ( window.SetFilesTotal ) SetFilesTotal( " .. iFileCount .. ")")
 end
 
 function PANEL:FileNeedsDownload(filename)
     local bExists = file.Exists(filename, "GAME")
-    if (bExists) then return 0 end
+    if bExists then return 0 end
 
     return 1
 end
 
 function PANEL:CheckDownloadTables()
     local NumDownloadables = NumDownloadables()
-    if (not NumDownloadables) then return end
-    if (self.NumDownloadables and NumDownloadables == self.NumDownloadables) then return end
+    if not NumDownloadables then return end
+    if self.NumDownloadables and NumDownloadables == self.NumDownloadables then return end
     self.NumDownloadables = NumDownloadables
     self:RefreshDownloadables()
 end
@@ -149,7 +162,7 @@ local PanelType_Loading = vgui.RegisterTable(PANEL, "EditablePanel")
 local pnlLoading = nil
 
 function GetLoadPanel()
-    if (not IsValid(pnlLoading)) then
+    if not IsValid(pnlLoading) then
         pnlLoading = vgui.CreateFromTable(PanelType_Loading)
     end
 
@@ -157,18 +170,18 @@ function GetLoadPanel()
 end
 
 function IsInLoading()
-    if (not IsValid(pnlLoading) or not IsValid(pnlLoading.HTML)) then return false end
+    if not IsValid(pnlLoading) or not IsValid(pnlLoading.HTML) then return false end
 
     return true
 end
 
 function UpdateLoadPanel(strJavascript)
-    if (not pnlLoading) then return end
+    if not pnlLoading then return end
     pnlLoading:RunJavascript(strJavascript)
 end
 
 function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemode)
-    if (engine.IsPlayingDemo()) then return end
+    if engine.IsPlayingDemo() then return end
     g_ServerName = servername
     g_MapName = mapname
     g_ServerURL = serverurl
@@ -199,10 +212,19 @@ function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemo
     serverurl = serverurl:Replace("%s", steamid)
     serverurl = serverurl:Replace("%m", mapname)
 
-    if (maxplayers > 1 and GetConVar("cl_enable_loadingurl"):GetBool()) then
-        serverurl = GetConVar("cl_loadingurl"):GetString()
+    if maxplayers > 1 and GetConVar("cl_enable_loadingurl"):GetBool() and serverurl:StartWith("http") then
         pnlLoading:ShowURL(serverurl, true)
     end
 
-    pnlLoading.JavascriptRun = string.format('if ( window.GameDetails ) GameDetails( "%s", "%s", "%s", %i, "%s", "%s", %.2f, "%s" );', servername:JavascriptSafe(), serverurl:JavascriptSafe(), mapname:JavascriptSafe(), maxplayers, steamid:JavascriptSafe(), g_GameMode:JavascriptSafe(), GetConVarNumber("volume"), GetConVarString("gmod_language"))
+    -- TODO: This should be pulled from the server
+    local niceGamemode = g_GameMode
+
+    for k, v in pairs(engine.GetGamemodes()) do
+        if niceGamemode == v.name then
+            niceGamemode = v.title
+            break
+        end
+    end
+
+    pnlLoading.JavascriptRun = string.format('if ( window.GameDetails ) GameDetails( "%s", "%s", "%s", %i, "%s", "%s", %.2f, "%s", "%s" );', servername:JavascriptSafe(), serverurl:JavascriptSafe(), mapname:JavascriptSafe(), maxplayers, steamid:JavascriptSafe(), g_GameMode:JavascriptSafe(), GetConVarNumber("volume"), GetConVarString("gmod_language"), niceGamemode:JavascriptSafe())
 end

@@ -4,7 +4,7 @@ PANEL_Browser.Base = "DFrame"
 function PANEL_Browser:Init()
     self.HTML = vgui.Create("HTML", self)
 
-    if (not self.HTML) then
+    if not self.HTML then
         print("SteamOverlayReplace: Failed to create HTML element")
         self:Remove()
 
@@ -12,7 +12,7 @@ function PANEL_Browser:Init()
     end
 
     self.HTML:Dock(FILL)
-    self.HTML:SetOpenLinksExternally(true)
+    --self.HTML:SetOpenLinksExternally( true )
     self:SetTitle("Steam overlay replacement")
     self:SetSize(ScrW() * 0.75, ScrH() * 0.75)
     self:SetSizable(true)
@@ -30,7 +30,7 @@ function GMOD_OpenURLNoOverlay(url)
     BrowserInst:SetURL(url)
 
     timer.Simple(0, function()
-        if (not gui.IsGameUIVisible()) then
+        if not gui.IsGameUIVisible() then
             gui.ActivateGameUI()
         end
     end)
@@ -93,26 +93,31 @@ function PANEL:Init()
 
     self.Yes:DockMargin(0, 0, 5, 0)
     self.Yes:Dock(RIGHT)
+    self.YesPerma = vgui.Create("DCheckBoxLabel", self.Buttons)
+    self.YesPerma:SetText("#openurl.yes_remember")
+    self.YesPerma:DockMargin(0, 0, 5, 0)
+    self.YesPerma:Dock(RIGHT)
+    self.YesPerma:SetVisible(false)
     self:SetSize(680, 104)
     self:Center()
     self:MakePopup()
     self:DoModal()
     hook.Add("Think", self, self.AlwaysThink)
 
-    if (not IsInGame()) then
+    if not IsInGame() then
         self.Disconnect:SetVisible(false)
     end
 end
 
 function PANEL:LoadServerInfo()
     self.CustomPanel:SetVisible(true)
-    self.CustomPanel:SetText("Loading server info...")
+    self.CustomPanel:SetText("#askconnect.loading")
     self.CustomPanel:SizeToContents()
 
     serverlist.PingServer(self:GetURL(), function(ping, name, desc, map, players, maxplayers, bot, pass, lp, ip, gamemode)
-        if (not IsValid(self)) then return end
+        if not IsValid(self) then return end
 
-        if (not ping) then
+        if not ping then
             self.CustomPanel.Color = Color(200, 50, 50)
             self.CustomPanel:SetText("#askconnect.no_response")
         else
@@ -123,19 +128,27 @@ function PANEL:LoadServerInfo()
     end)
 end
 
+function PANEL:DisplayPermissionInfo()
+    self.CustomPanel.Color = Color(200, 200, 200)
+    self.CustomPanel:SetVisible(true)
+    self.CustomPanel:SetDark(true)
+    self.CustomPanel:SetText("\n" .. language.GetPhrase("permission." .. self:GetURL()) .. "\n" .. language.GetPhrase("permission." .. self:GetURL() .. ".help") .. "\n")
+    self.CustomPanel:SizeToContents()
+end
+
 function PANEL:AlwaysThink()
     -- Ping the server for details
-    if (SysTime() - self.StartTime > 0.1 and self.Type == "askconnect" and not self.CustomPanel:IsVisible()) then
+    if SysTime() - self.StartTime > 0.1 and self.Type == "askconnect" and not self.CustomPanel:IsVisible() then
         self:LoadServerInfo()
     end
 
-    if (self.StartTime + 1 > SysTime()) then return end
+    if self.StartTime + 1 > SysTime() then return end
 
-    if (not self.Yes:IsEnabled()) then
+    if not self.Yes:IsEnabled() then
         self.Yes:SetEnabled(true)
     end
 
-    if (not gui.IsGameUIVisible()) then
+    if not gui.IsGameUIVisible() then
         self:Remove()
     end
 end
@@ -152,6 +165,10 @@ function PANEL:SetURL(url)
     self.CustomPanel:SetVisible(false)
     self.CustomPanel.Color = Color(0, 0, 0, 0)
     self:InvalidateLayout()
+
+    if self.Type == "permission" then
+        self:DisplayPermissionInfo()
+    end
 end
 
 function PANEL:GetURL()
@@ -164,17 +181,23 @@ function PANEL:DoNope()
 end
 
 function PANEL:DoYes()
-    if (self.StartTime + 1 > SysTime()) then return end
-    self:DoYesAction()
+    if self.StartTime + 1 > SysTime() then return end
+    local saveYes = self.YesPerma:GetChecked()
+    self:DoYesAction(not saveYes)
     self:Remove()
     gui.HideGameUI()
 end
 
-function PANEL:DoYesAction()
-    if (self.Type == "openurl") then
+function PANEL:DoYesAction(bSessionOnly)
+    if self.Type == "openurl" then
         gui.OpenURL(self.URL:GetText())
-    elseif (self.Type == "askconnect") then
-        JoinServer(self.URL:GetText())
+    elseif self.Type == "askconnect" then
+        permissions.Grant("connect", bSessionOnly)
+        permissions.Connect(self.URL:GetText())
+    elseif self.Type == "permission" then
+        permissions.Grant(self.URL:GetText(), bSessionOnly)
+    else
+        ErrorNoHaltWithStack("Unhandled confirmation type '" .. tostring(self.Type) .. "'!")
     end
 end
 
@@ -182,14 +205,18 @@ function PANEL:SetType(t)
     self.Type = t
     self:SetTitle("#" .. t .. ".title")
     self.Garble:SetText("#" .. t .. ".text")
+
+    if self.Type == "permission" or self.Type == "askconnect" then
+        self.YesPerma:SetVisible(true)
+    end
 end
 
 local PanelInst = nil
 
 local function OpenConfirmationDialog(address, confirm_type)
-    if (IsValid(PanelInst) and PanelInst:GetURL() == address) then return end
+    if IsValid(PanelInst) and PanelInst:GetURL() == address then return end
 
-    if (not IsValid(PanelInst)) then
+    if not IsValid(PanelInst) then
         PanelInst = vgui.CreateFromTable(PANEL)
     end
 
@@ -197,50 +224,25 @@ local function OpenConfirmationDialog(address, confirm_type)
     PanelInst:SetURL(address)
 
     timer.Simple(0, function()
-        if (not gui.IsGameUIVisible()) then
+        if not gui.IsGameUIVisible() then
             gui.ActivateGameUI()
         end
     end)
 end
 
-local OpenURLCalls = 0
-
 -- Called from the engine
 function RequestOpenURL(url)
-    OpenURLCalls = OpenURLCalls + 1
-
-    if OpenURLCalls > 10 then
-        print("Blocking RequestOpenURL due to spam.")
-
-        return
-    end
-
     OpenConfirmationDialog(url, "openurl")
 end
 
-local ConnectCalls = 0
-
--- Called from the engine
 function RequestConnectToServer(serverip)
-    ConnectCalls = ConnectCalls + 1
-
-    if ConnectCalls >= 10 then
-        print("Blocking RequestConnectToServer due to spam.")
-
-        return
+    if permissions.IsGranted("connect") then
+        permissions.Connect(serverip)
+    else
+        OpenConfirmationDialog(serverip, "askconnect")
     end
-
-    OpenConfirmationDialog(serverip, "askconnect")
 end
 
-timer.Create("RNBDCT", 2, 0, function()
-    if ConnectCalls > 0 or OpenURLCalls > 0 then
-        if not IsInGame() then
-            ConnectCalls = 0
-            OpenURLCalls = 0
-        else
-            ConnectCalls = ConnectCalls - 1
-            OpenURLCalls = OpenURLCalls - 1
-        end
-    end
-end)
+function RequestPermission(perm)
+    OpenConfirmationDialog(perm, "permission")
+end

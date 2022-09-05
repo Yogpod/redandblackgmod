@@ -294,6 +294,7 @@ controls control:hover
 
 	visibility: hidden;
 	overflow: hidden;
+	min-width: 140px;
 }
 .ugc_settings.active
 {

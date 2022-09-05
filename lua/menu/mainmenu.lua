@@ -69,11 +69,11 @@ function PANEL:Paint()
 		if ( self.IsInGame ) then
 
 			if ( IsValid( self.InnerPanel ) ) then self.InnerPanel:Remove() end
-			self.HTML:QueueJavascript( "SetInGame( true )" )
+			self:Call( "SetInGame( true )" )
 
 		else
 
-			self.HTML:QueueJavascript( "SetInGame( false )" )
+			self:Call( "SetInGame( false )" )
 
 		end
 	end
@@ -87,7 +87,7 @@ function PANEL:Paint()
 		self.CanAddServerToFavorites = canAdd
 		self.IsCurrentServerFavorite = isFav
 
-		self.HTML:QueueJavascript( "SetShowFavButton( " .. tostring( self.CanAddServerToFavorites ) ..", " .. tostring( self.IsCurrentServerFavorite ) .. " )" )
+		self:Call( "SetShowFavButton( " .. tostring( self.CanAddServerToFavorites ) ..", " .. tostring( self.IsCurrentServerFavorite ) .. " )" )
 
 	end
 
@@ -104,9 +104,9 @@ function PANEL:RefreshGamemodes()
 
 	local json = util.TableToJSON( engine.GetGamemodes() )
 
-	self.HTML:QueueJavascript( "UpdateGamemodes( " .. json .. " )" )
+	self:Call( "UpdateGamemodes( " .. json .. " )" )
 	self:UpdateBackgroundImages()
-	self.HTML:QueueJavascript( "UpdateCurrentGamemode( '" .. engine.ActiveGamemode():JavascriptSafe() .. "' )" )
+	self:Call( "UpdateCurrentGamemode( '" .. engine.ActiveGamemode():JavascriptSafe() .. "' )" )
 
 end
 
@@ -235,19 +235,10 @@ end )
 
 function LoadNewsList()
 	if ( !pnlMainMenu ) then return end
-
 	local json = util.TableToJSON( NewsList )
-	pnlMainMenu:Call( "UpdateNewsList(" .. json .. ", " .. cookie.GetString( "hide_newslist", "false" ) .. " )" )
-	local nl = {{
-		Date = "4/27/2020",
-		HeaderImage = "http://pls.propkill.me/h1qB.png",
-		ShortName = "RNBGmod",
-		SummaryHtml = "Welcome",
-		Title = "Red&Black Garry's Mod",
-		Url = "https://github.com/Yogpod/redandblackgmod"
-	}}
-	json = util.TableToJSON( nl )
-	pnlMainMenu:Call( "UpdateNewsList(" .. json .. ")" )
+	local bHide = cookie.GetString( "hide_newslist", "false" ) == "true"
+
+	pnlMainMenu:Call( "UpdateNewsList(" .. json .. ", " .. tostring( bHide ) .. " )" )
 end
 
 function SaveHideNews( bHide )
@@ -304,7 +295,7 @@ function GetServers( category, id )
 	Servers[ category ] = {}
 
 	local data = {
-		Callback = function( ping, name, desc, map, players, maxplayers, botplayers, pass, lastplayed, address, gm, workshopid, isAnon, version, loc, gmcat )
+		Callback = function( ping, name, desc, map, players, maxplayers, botplayers, pass, lastplayed, address, gm, workshopid, isAnon, netVersion, luaVersion, loc, gmcat )
 
 			if ( Servers[ category ] && Servers[ category ][ address ] ) then print( "Server Browser Error!", address, category ) return end
 			Servers[ category ][ address ] = true
@@ -318,9 +309,12 @@ function GetServers( category, id )
 				address = string.JavascriptSafe( address )
 				gm = string.JavascriptSafe( gm )
 				workshopid = string.JavascriptSafe( workshopid )
+				netVersion = string.JavascriptSafe( tostring( netVersion ) )
+				loc = string.JavascriptSafe( loc )
+				gmcat = string.JavascriptSafe( gmcat )
 
 				pnlMainMenu:Call( string.format( 'AddServer( "%s", "%s", %i, "%s", "%s", "%s", %i, %i, %i, %s, %i, "%s", "%s", "%s", %s, "%s", "%s", "%s" , "%s" );',
-					category, id, ping, name, desc, map, players, maxplayers, botplayers, tostring( pass ), lastplayed, address, gm, workshopid, tostring( isAnon ), tostring( version ), tostring( serverlist.IsServerFavorite( address ) ), loc, gmcat ) )
+					category, id, ping, name, desc, map, players, maxplayers, botplayers, tostring( pass ), lastplayed, address, gm, workshopid, tostring( isAnon ), netVersion, tostring( serverlist.IsServerFavorite( address ) ), loc, gmcat ) )
 
 			else
 
@@ -337,8 +331,10 @@ function GetServers( category, id )
 			if ( Servers[ category ] && Servers[ category ][ address ] ) then print( "Server Browser Error!", address, category ) return end
 			Servers[ category ][ address ] = true
 
+			local version = string.JavascriptSafe( tostring( VERSION ) )
+
 			pnlMainMenu:Call( string.format( 'AddServer( "%s", "%s", %i, "%s", "%s", "%s", %i, %i, %i, %s, %i, "%s", "%s", "%s", %s, "%s", "%s", "%s", "%s" );',
-					category, id, 2000, "The server at address " .. address .. " failed to respond", "Unreachable Servers", "no_map", 0, 2, 0, 'false', 0, address, 'unkn', '0', 'true', tostring( VERSION ), tostring( serverlist.IsServerFavorite( address ) ), "", "" ) )
+					category, id, 2000, "The server at address " .. address .. " failed to respond", "Unreachable Servers", "no_map", 0, 2, 0, 'false', 0, address, 'unkn', '0', 'true', version, tostring( serverlist.IsServerFavorite( address ) ), "", "" ) )
 
 			return !ShouldStop[ category ]
 
@@ -464,8 +460,11 @@ hook.Add( "GameContentChanged", "RefreshMainMenu", function()
 
 end )
 
-hook.Add( "LoadGModSaveFailed", "LoadGModSaveFailed", function( str )
-	Derma_Message( str, "Failed to load save!", "OK" )
+hook.Add( "LoadGModSaveFailed", "LoadGModSaveFailed", function( str, wsid )
+	local button2 = nil
+	if ( wsid && wsid:len() > 0 ) then button2 = "Open map on Steam Workshop" end
+
+	Derma_Query( str, "Failed to load save!", "OK", nil, button2, function() steamworks.ViewFile( wsid ) end )
 end )
 
 --
@@ -474,7 +473,7 @@ end )
 timer.Simple( 0, function()
 
 	pnlMainMenu = vgui.Create( "MainMenuPanel" )
-	pnlMainMenu:Call( "UpdateVersion( '" .. VERSIONSTR:JavascriptSafe() .. "', '" .. BRANCH:JavascriptSafe() .. "' )" )
+	pnlMainMenu:Call( "UpdateVersion( '" .. VERSIONSTR:JavascriptSafe() .. "', '" .. NETVERSIONSTR:JavascriptSafe() .. "', '" .. BRANCH:JavascriptSafe() .. "' )" )
 
 	local language = GetConVarString( "gmod_language" )
 	LanguageChanged( language )
