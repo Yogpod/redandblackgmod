@@ -120,6 +120,9 @@ function ControllerServers( $scope, $element, $rootScope, $location )
 		}
 
 		Scope.CurrentGamemode = gm;
+		
+		if ( gm ) gm.server_offset = 0;
+		UpdateDigest( Scope, 50 );
 	}
 
 	$scope.ServerClass = function( sv )

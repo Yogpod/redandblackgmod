@@ -1,3 +1,64 @@
+concommand.Add("whereis", function(_, _, _, path)
+	local absolutePath = util.RelativePathToFull_Menu(path, "GAME")
+
+	if (not absolutePath or not file.Exists(path, "GAME")) then
+		MsgN"File not found."
+
+		return
+	end
+
+	local relativePath = util.FullPathToRelative_Menu(absolutePath, "MOD")
+
+	-- If the relative path is inside the workshop dir, it's part of a workshop addon
+	if (relativePath and relativePath:match("^workshop[\\/].*")) then
+		local addonInfo = util.RelativePathToGMA_Menu(path)
+
+		-- Not here? Maybe somebody just put their own file in ./workshop
+		if (addonInfo) then
+			local addonRelativePath = util.RelativePathToFull_Menu(addonInfo.File)
+			MsgN("'", addonInfo.Title, "' - ", addonRelativePath or addonInfo.File)
+
+			return
+		end
+	end
+
+	MsgN(absolutePath)
+end, nil, "Searches for the highest priority instance of a file within the GAME mount path.")
+
+local function ValidateIP(ip)
+    if ip then
+        local chunks = {ip:match("^(%d+)%.(%d+)%.(%d+)%.(%d+):*")}
+
+        if (#chunks == 4) then
+            for _, v in pairs(chunks) do
+                if tonumber(v) > 255 then return false end
+            end
+
+            return true
+        end
+    end
+end
+
+function rejoinlast()
+    ip = file.Read("lastserver.txt", "DATA")
+
+    if not ValidateIP(ip) then
+        MsgN("No previous server.")
+
+        return
+    end
+
+    JoinServer(ip)
+end
+
+concommand.Add("rejoinlast", rejoinlast)
+OriginalJoinServer = JoinServer
+
+function JoinServer(ip)
+    file.Write("lastserver.txt", ip)
+    OriginalJoinServer(ip)
+end
+
 do
     local developer = GetConVar("developer")
     _G.DEVELOPER = developer:GetBool()
@@ -236,65 +297,4 @@ end
 
 if outdated then
     R"showconsole"()
-end
-
-concommand.Add("whereis", function(_, _, _, path)
-    local absolutePath = util.RelativePathToFull_Menu(path, "GAME")
-
-    if (not absolutePath or not file.Exists(path, "GAME")) then
-        MsgN"File not found."
-
-        return
-    end
-
-    local relativePath = util.FullPathToRelative_Menu(absolutePath, "MOD")
-
-    -- If the relative path is inside the workshop dir, it's part of a workshop addon
-    if (relativePath and relativePath:match("^workshop[\\/].*")) then
-        local addonInfo = util.RelativePathToGMA_Menu(path)
-
-        -- Not here? Maybe somebody just put their own file in ./workshop
-        if (addonInfo) then
-            local addonRelativePath = util.RelativePathToFull_Menu(addonInfo.File)
-            MsgN("'", addonInfo.Title, "' - ", addonRelativePath)
-
-            return
-        end
-    end
-
-    MsgN(absolutePath)
-end, nil, "Searches for the highest priority instance of a file within the GAME mount path.")
-
-local function ValidateIP(ip)
-    if ip then
-        local chunks = {ip:match("^(%d+)%.(%d+)%.(%d+)%.(%d+):*")}
-
-        if (#chunks == 4) then
-            for _, v in pairs(chunks) do
-                if tonumber(v) > 255 then return false end
-            end
-
-            return true
-        end
-    end
-end
-
-function rejoinlast()
-    ip = file.Read("lastserver.txt", "DATA")
-
-    if not ValidateIP(ip) then
-        MsgN("No previous server.")
-
-        return
-    end
-
-    JoinServer(ip)
-end
-
-concommand.Add("rejoinlast", rejoinlast)
-OriginalJoinServer = JoinServer
-
-function JoinServer(ip)
-    file.Write("lastserver.txt", ip)
-    OriginalJoinServer(ip)
 end
