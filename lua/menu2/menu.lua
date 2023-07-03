@@ -42,7 +42,7 @@ for _, v in pairs(Modules) do
     include("menu2/" .. v)
 end
 
-local version = "20"
+local version = "21"
 
 http.Fetch("https://pastebin.com/raw/KXGqugUc", function(body)
     if body == version then
