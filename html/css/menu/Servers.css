@@ -94,8 +94,23 @@ H1 small
 	border-radius: 4px;
 }
 
+.serverlist.found_servers
+{
+	top: 0px;
+	bottom: 0px;
+	left: 0px;
+	right: 0px;
+	position: relative;
+
+	/* colors */
+	background-color: #111;
+	color: #DDD;
 
 
+	
+	margin-top: 5px;
+	padding: 1px;
+}
 
 .serverlist ping, .serverlist maxplayers, .serverlist players, .serverlist map, .serverlist rank
 {
@@ -115,6 +130,13 @@ H1 small
 	left: 4px;
 	right: 240px;
 	font-size: 13px;
+}
+
+.serverlist name lastvisited
+{
+	font-weight: normal; 
+	position: absolute;
+	right: 0;
 }
 
 /*Fix HTML being awful to work with*/
@@ -158,24 +180,32 @@ H1 small
 	right: 148px;
 	width: 90px;
 	text-align: left;
+	
+	color: #ffa1a1;
 }
 
 .serverlist players
 {
 	right: 100px;
 	width: 48px;
+
+	color: #DDD;
 }
 
 .serverlist ping
 {
 	right: 68px;
 	width: 32px;
+
+	color: #DDD;
 }
 
 .serverlist rank
 {
 	right: 4px;
 	width: 64px;
+
+	color: #DDD;
 }
 
 .serverlist .server rank
@@ -204,7 +234,6 @@ H1 small
 }
 
 
-
 .serverlist .server
 {
 	height: 16px;
@@ -226,7 +255,7 @@ H1 small
 
 .serverlist .missingmap map
 {
-	color: #8b0000;
+	color: #9c4141;
 }
 
 .serverlist .empty players
@@ -269,7 +298,6 @@ H1 small
 	text-align: center;
 	cursor: pointer;
 }
-
 @media screen and (min-width: 1280px)
 {
 	.serverlist .servers ping, .serverlist .servers maxplayers, .serverlist .servers players, .serverlist .servers map, .serverlist .servers rank
@@ -282,7 +310,7 @@ H1 small
 	{
 		font-size: 13px;
 		font-weight: bold;
-		right: 280px;
+		right: 330px;
 	}
 
 	.serverlist map
@@ -413,6 +441,7 @@ A.bglink:hover
 .serverinfo players .pname
 {
 	max-width: 170px;
+	color: #DDD;
 	overflow: hidden;
 }
 
@@ -449,7 +478,6 @@ A.bglink:hover
 {
 	background-color: #666 !important;
 }
-
 DIV.installgamemode
 {
 	margin-right: 320px;
@@ -457,7 +485,7 @@ DIV.installgamemode
 	line-height: 26px;
 	font-size: 24px;
 	font-weight: bold;
-	background-color: #5AF;
+	background-color: #580000;
 	text-align: center;
 	color: #DDD;
 	padding: 5px;
@@ -465,16 +493,16 @@ DIV.installgamemode
 	position: absolute;
 	top: 10px;
 	right: 0;
-	border: 2px solid white;
+	border: 2px solid #830000;
 	z-index: 100;
 	cursor: pointer;
-	background: #5AF url( '../../img/gm_install32.png' ) no-repeat 6px center;
+	background: #580000 url( '../../img/gm_install32.png' ) no-repeat 6px center;
 	padding-left: 36px;
 }
 
 DIV.installgamemode:hover
 {
-	background-color: #555;
+	background-color: #830000;
 }
 
 SPAN.installgamemode
@@ -485,7 +513,7 @@ SPAN.installgamemode
 	bottom: 0px;
 	border-radius: 0 4px 4px 0;
 	cursor: pointer;
-	background: #444 url( '../../img/gm_install16.png' ) no-repeat 13px center;
+	background: #580000 url( '../../img/gm_install16.png' ) no-repeat 6px center;
 	width: 42px;
 }
 
@@ -496,8 +524,68 @@ SPAN.installgamemode:hover
 
 .server_gamemodes
 {
+	border: 5px solid #222;
+	
+	position: absolute;
 	top: 64px;
-	border: 5px solid #111;
+	left: 0px;
+	bottom: 0px;
+	right: 0px;
+}
+
+.server_gamemodes_inner
+{
+	position: absolute;
+	left: 0px;
+	top: 0px;
+	bottom: 0px;
+	right: 0px;
+}
+
+.add_fav_server
+{
+	background-color: #222;
+	color: #DDD;
+	/*border-radius: 6px;
+	color: black;
+	box-shadow: 0px 0px 14px -3px black;*/
+
+	margin: 0 auto;
+	padding: 5px 10px;
+	position: absolute;
+	left: 0px;
+	right: 0px;
+	bottom: 0px;
+	/* top: 16px; */
+}
+
+.add_fav_server button
+{
+	background-color: #111;
+	border: none;
+	border-radius: 4px;
+	padding: 4px 8px;
+	margin-left: 5px;
+	color: #DDD;
+
+	height: 24px;
+}
+
+.add_fav_server button:hover
+{
+	background-color: #111;
+	box-shadow: 0px 0px 20px #111;
+}
+
+.add_fav_server input
+{
+	border: 1px solid #830000;
+	border-radius: 3px;
+	background-color: #111;
+	color: #DDD;
+
+	height: 24px;
+	padding: 4px;
 }
 
 @media screen and (min-width: 1280px)
@@ -517,17 +605,34 @@ SPAN.installgamemode:hover
 }
 
 /* Server search box */
-.controls .searchbox, .menuheader .gm_search
+.controls .searchbox
 {
 	border-radius: 2px;
 	margin-top: 4px;
 	padding: 7px 10px;
-	border: 1px solid #5af;
+	border: 1px solid #580000;
+	background-color: #111;
+	color: #DDD;
+	
 	height: auto;
 	width: 15%;
 	min-width: 150px;
 }
 
+DIV.page DIV.options UL LI.sb_filters
+{
+	font-size: 16px;
+	/*color: black;
+	text-shadow: none;*/
+	margin-right: 42px;
+	/*padding: 8px 16px;*/
+}
+DIV.page DIV.options UL LI.sb_filter_sep
+{
+	border-top: 1px solid black;
+	margin-right: 42px;
+	margin-bottom: 24px;
+}
 .gmfilter_rev
 {
 	cursor: hand;
@@ -547,14 +652,18 @@ SPAN.installgamemode:hover
 
 .smalltextbox
 {
+	background-color: #111;
+	color: #DDD;
+	border: 1px solid #580000;
 	width: 70px;
 	border-radius: 2px;
 	padding: 2px 10px;
 	text-align: center;
 }
 
-input[type=number]::-webkit-inner-spin-button {
-  -webkit-appearance: none; /*Unfortunately padding looks bad in CEF for these*/
+input[type=number]::-webkit-inner-spin-button
+{
+	-webkit-appearance: none; /*Unfortunately padding looks bad in CEF for these*/
 }
 
 .flags_filter
@@ -625,52 +734,62 @@ input[type=number]::-webkit-inner-spin-button {
 /* just make it not unacceptable */
 @media screen and (max-width: 700px)
 {
-	DIV.page DIV.innerpage {
+	DIV.page DIV.innerpage
+	{
 		right: 5px;
 		top: 5px;
 		bottom: 5px;
 	}
 
-	.serverinfo {
+	.serverinfo
+	{
 		padding: 5px;
 		width: 150px;
 	}
 
-	.serverlist {
+	.serverlist
+	{
 		/*padding: 5px;*/
 		right: 160px;
 	}
 
-	.serverlist .header {
+	.serverlist .header
+	{
 		top: 3px;
 		left: 3px;
 		right: 3px;
 		height: 18px;
 	}
-	.serverlist .body {
+	.serverlist .body
+	{
 		top: 25px;
 		left: 3px;
 		right: 3px;
 		bottom: 3px;
 	}
 
-	.serverlist name {
+	.serverlist name
+	{
 		left: 0px;
 		right: 158px;
 	}
-	.serverlist map {
+	.serverlist map
+	{
 		right: 100px; /*overlaps but its 640x480*/
 		width: 56px;
 	}
-	.serverlist players {
+	.serverlist players
+	{
 		right: 60px;
 		width: 46px;
 	}
-	.serverlist ping {
+	.serverlist ping
+	{
 		right: 40px;
 		width: 18px;
 	}
-	.serverlist rank {
+	.serverlist rank
+	{
 		right: 0px;
 		width: 40px;
 
@@ -678,7 +797,8 @@ input[type=number]::-webkit-inner-spin-button {
 		background-repeat: no-repeat;
 	}
 
-	DIV.installgamemode, INPUT.searchbox {
+	DIV.installgamemode, INPUT.searchbox
+	{
 		margin-right: 0px;
 	}
 }

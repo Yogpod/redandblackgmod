@@ -258,6 +258,12 @@ controls control:hover
 {
 	background-color: #666;
 }
+controls control.disabled
+{
+	background-color: #444;
+	color: #666;
+	cursor: default;
+}
 
 .ugc_settings_button
 {
@@ -349,6 +355,14 @@ controls control:hover
 	min-width: 500px;
 	margin-bottom: 5px;
 }
+
+.preset_content input[type=text]
+{
+	padding: 2px 4px;
+	box-sizing: border-box;
+	margin-bottom: 8px;
+}
+
 .preset_list
 {
 	background: rgb(58, 58, 58, 255);
