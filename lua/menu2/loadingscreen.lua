@@ -53,6 +53,7 @@ function PANEL:OnActivate()
 	g_SteamID = ""
 	self:ShowURL(GetDefaultLoadingHTML())
 	self.NumDownloadables = 0
+	self.CheckedSingleplayer = false
 end
 
 function PANEL:OnDeactivate()
@@ -71,6 +72,12 @@ end
 function PANEL:Think()
 	self:CheckForStatusChanges()
 	self:CheckDownloadTables()
+	if (not self.CheckedSingleplayer and IsHostingGame()) then
+		local map = GetConVarString("host_map")
+		map = string.StripExtension(map)
+		GameDetails(GetConVarString("hostname"), "127.0.0.1", map, 1, "", GetConVarString("gamemode"), true)
+		self.CheckedSingleplayer = true
+	end
 end
 
 function PANEL:StatusChanged(strStatus)
@@ -161,7 +168,7 @@ function IsInLoading()
 	return true
 end
 
-function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemode)
+function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemode, noDump)
 	if (engine.IsPlayingDemo()) then return end
 	g_ServerName = servername
 	g_MapName = mapname
@@ -176,12 +183,15 @@ function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemo
 		SentStat = true
 	end
 
-	MsgN(servername)
-	MsgN(serverurl)
-	MsgN(gamemode)
-	MsgN(mapname)
-	MsgN(maxplayers)
-	MsgN(steamid)
+	if (not noDump) then
+		MsgN(servername)
+		MsgN(serverurl)
+		MsgN(gamemode)
+		MsgN(mapname)
+		MsgN(maxplayers)
+		MsgN(steamid)
+	end
+
 	if serverurl == "" then
 		serverurl = g_ServerURL
 	else
@@ -200,5 +210,5 @@ function GameDetails(servername, serverurl, mapname, maxplayers, steamid, gamemo
 		end
 	end
 
-	pnlLoading.JavascriptRun = string.format([[if ( window.GameDetails ) GameDetails( "%s", "%s", "%s", %i, "%s", "%s", %.2f, "%s", "%s" );]], servername:JavascriptSafe(), serverurl:JavascriptSafe(), mapname:JavascriptSafe(), maxplayers, steamid:JavascriptSafe(), g_GameMode:JavascriptSafe(), GetConVarNumber("snd_musicvolume"), GetConVarString("gmod_language"), niceGamemode:JavascriptSafe())
+	pnlLoading.JavascriptRun = string.format([[if ( window.GameDetails ) GameDetails( "%s", "%s", "%s", %i, "%s", "%s", %.2f, "%s", "%s" )]], servername:JavascriptSafe(), serverurl:JavascriptSafe(), mapname:JavascriptSafe(), maxplayers, steamid:JavascriptSafe(), g_GameMode:JavascriptSafe(), GetConVarNumber("snd_musicvolume"), GetConVarString("gmod_language"), niceGamemode:JavascriptSafe())
 end
