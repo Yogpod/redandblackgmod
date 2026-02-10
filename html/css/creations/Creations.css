@@ -20,6 +20,11 @@ A
 	text-decoration: none;
 }
 
+A:not(:disabled)
+{
+	cursor: pointer;
+}
+
 DIV.page
 {
 	position: absolute;
@@ -65,43 +70,6 @@ UL.category LI.icon
 	position: absolute;
 }
 
-.btn-primary
-{
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#08C), to(#05C));
-	border: 1px solid #CCC;
-	border-color: #05C #05C #003580;
-	color: white;
-	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-	border-radius: 6px;
-	cursor: pointer;
-	vertical-align: middle;
-	-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
-}
-
-.btn-primary:hover
-{
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#2ae), to(#27e)); 
-}
-
-.btn-back
-{
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#08C), to(#05C));
-	border: 1px solid #CCC;
-	border-color: #05C #05C #003580;
-	color: white;
-	text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
-	border-radius: 3px;
-	cursor: pointer;
-	vertical-align: middle;
-	-webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2), 0 1px 2px rgba(0, 0, 0, 0.05);
-	height: 24px;
-}
-
-.btn-back:hover
-{
-	background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#2ae), to(#27e)); 
-}
-
 DIV.gridicon
 {
 	position: relative;
@@ -110,8 +78,8 @@ DIV.gridicon
 	width: 300px;
 	float: left;
 	margin: 3px;
-	border-radius: 2px;
-	background-position:center; 
+	/*border-radius: 2px;*/
+	background-position:center;
 }
 
 DIV.gridicon name
@@ -173,7 +141,7 @@ right
 	float: right;
 }
 
-loading 
+loading
 {
 	font-size: 48px;
 	font-weight: bolder;
@@ -199,6 +167,7 @@ workshopcontainer
 	right: 0px;
 	top: 0px;
 	background-color: transparent;
+	padding: 0px;
 }
 
 workshopmessage
@@ -212,6 +181,7 @@ workshopmessage
 	background-color: #111;
 	border: 3px solid #444;
 	margin: 8px;
+	margin-right: 0px;
 	border-radius: 6px;
 	list-style: none;
 	padding: 4px;
@@ -254,13 +224,14 @@ workshopmessage
 
 .options UL LI button
 {
-	border: 1px solid rgba( 100, 100, 100, 0.5 );
 	border-radius: 2px;
 	padding: 4px 8px;
 	width: 100%;
+	border: 1px solid rgba( 100, 100, 100, 0.5 );
 	background-color: rgba( 150, 150, 150, 0.5 );
 	margin: 0px;
 	cursor: pointer;
+
 	font-weight: bolder;
 	font-size: 18px;
 	color: #fff;
@@ -269,7 +240,9 @@ workshopmessage
 
 .options UL LI button:hover
 {
+	border: 1px solid rgba( 255, 255, 255, 0.6 );
 	background-color: rgba( 200, 200, 200, 0.7 );
+	text-shadow: 0px 0px 6px rgba( 0, 0, 0, 0.3 );
 }
 
 .options UL LI A
@@ -320,7 +293,8 @@ workshopmessage
 }
 
 /* 1152x864 and lower */
-@media (max-width: 700px) {
+@media (max-width: 700px)
+{
 	workshopicon
 	{
 		margin: 0px;
@@ -330,12 +304,15 @@ workshopmessage
 }
 
 /* 1024x768 and lower */
-@media (max-width: 670px) {
-	.options {
+@media (max-width: 670px)
+{
+	.options
+	{
 		width: 150px !important;
 	}
 
-	.clickable {
+	.clickable
+	{
 		padding-left: 5px !important;
 	}
 
@@ -355,12 +332,15 @@ workshopmessage
 }
 
 /* 800x600 and lower */
-@media (max-width: 530px) {
-	.options {
+@media (max-width: 530px)
+{
+	.options
+	{
 		width: 130px !important;
 	}
 
-	.clickable {
+	.clickable
+	{
 		padding-left: 5px !important;
 	}
 
@@ -368,7 +348,8 @@ workshopmessage
 	{
 		left: 130px !important;
 	}
-	.options UL {
+	.options UL
+	{
 		margin: 0px;
 	}
 	workshopicon

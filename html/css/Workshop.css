@@ -205,7 +205,8 @@ workshopmessage
 	margin: 64px;
 }
 
-@media screen and (max-height: 800px) {
+@media screen and (max-height: 800px)
+{
 	workshopmessage
 	{
 		margin: 16px;
@@ -258,6 +259,8 @@ controls control:hover
 {
 	background-color: #666;
 }
+
+
 controls control.disabled
 {
 	background-color: #444;
@@ -329,6 +332,7 @@ controls control.disabled
 	text-align: center;
 	border-radius: 4px;
 	cursor: default;
+	min-width: 140px;
 }
 .ugc_settings a:hover
 {
@@ -354,15 +358,22 @@ controls control.disabled
 {
 	min-width: 500px;
 	margin-bottom: 5px;
+	display: -webkit-box;
 }
-
-.preset_content input[type=text]
+.preset_side
+{
+	width: 150px;
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+}
+.preset_side input[type="text"]
 {
 	padding: 2px 4px;
 	box-sizing: border-box;
 	margin-bottom: 8px;
+	margin-right: 8px;
+	display: block;
 }
-
 .preset_list
 {
 	background: rgb(58, 58, 58, 255);
@@ -389,10 +400,8 @@ controls control.disabled
 }
 .preset_data
 {
-	width: 345px;
+	-webkit-box-flex: 1;
 	padding-left: 5px;
-	display: inline-block;
-	vertical-align: top;
 	cursor: default;
 }
 
@@ -426,6 +435,11 @@ pagination .back, pagination .next
 	background-color: #444;
 	border-radius: 3px;
 	background-position: center center;
+}
+
+pagination .back:hover, pagination .next:hover
+{
+	background-color: #666;
 }
 
 pagination .next
